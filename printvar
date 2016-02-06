@@ -1,0 +1,8 @@
+#!/bin/bash
+# print environment variable value
+
+envar=$1
+upper_envar="$(echo $envar | tr 'a-z' 'A-Z')"
+"(echo \$ $upper_envar)"
+# "printenv | grep \"$upper_envar\""
+

@@ -1,0 +1,4 @@
+#!/bin/bash
+dd if=/dev/zero of=/media/moh/LIVE/swap bs=4096 count=431072
+sudo mkswap /media/moh/LIVE/swap
+sudo swapon -p 1000 /media/moh/LIVE/swap

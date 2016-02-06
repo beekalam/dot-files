@@ -1,0 +1,2 @@
+#!/bin/bash
+nmcli -p con up id "DSL connection 1"
