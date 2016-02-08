@@ -1,0 +1,4 @@
+#!/bin/bash
+# count the number dirs in current dir and all
+# subdirectories
+find . -type d | wc -l
