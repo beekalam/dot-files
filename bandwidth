@@ -1,0 +1,5 @@
+#!/bin/bash
+# prints total bandwidth used
+echo  "`ifconfig wlan0 | grep bytes | cut -d'(' -f2 | cut -d')' -f1 | cut -d' ' -f1` + `ifconfig wlan0 | grep bytes | cut -d'(' -f3 | cut -d')' -f1 | cut -d' ' -f1`" | bc
+
+
