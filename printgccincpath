@@ -1,0 +1,6 @@
+#!/bin/bash
+# prints gcc include path
+
+gcc -v -E - < /dev/null 2>&1 | awk '/^#include/,/^End of search/' | grep '^ '
+
+
