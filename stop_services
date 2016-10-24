@@ -1,0 +1,32 @@
+#!/bin/bash
+echo "stopping teamviewerd..."
+sudo service teamviewerd stop
+echo "stopping mysql...."
+sudo service mysql stop
+echo "stopping mongodb..."
+sudo service mongodb stop
+echo "stopping sylkserver..."
+sudo service sylkserver stop
+echo "stopping janus..."
+sudo service janus stop
+echo "stopping hddtemp..."
+sudo service hddtemp stop
+echo "stopping virtualbox..."
+sudo service virtualbox stop
+echo "stopping virtualbox-guest-utils ...."
+sudo service virtualbox-guest-utils stop
+echo "stopping vmware...."
+sudo service vmware stop
+echo "stopping vmware-USBArbitrator..."
+sudo service vmware-USBArbitrator stop
+echo "stopping vmware-workstation-server..."
+sudo service vmware-workstation-server stop
+echo "stopping vmware-workstation-server..."
+sudo service teamviewerd stop
+echo "stopping tor..."
+sudo service tor stop
+echo "stopping samba..."
+sudo service samba stop
+sudo service samba-ad-dc stop
+
+

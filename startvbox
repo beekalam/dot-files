@@ -1,0 +1,3 @@
+#!/bin/bash
+sudo service virtualbox start
+sudo service virtualbox-guest-utils start

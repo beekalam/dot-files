@@ -1,0 +1,4 @@
+#!/bin/bash
+# takes screenshot of an area
+
+/usr/bin/gnome-screenshot -a -f ~/Pictures/`date +%s`.png

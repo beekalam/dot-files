@@ -1,0 +1,6 @@
+clear all arp cache entries
+#### show a summary of all the NIC on the system 
+	
+	not like ifconfig output just the interface name
+	and the  ip and mac address and may be send receive
+#### write a speed test with the output of the wget comman

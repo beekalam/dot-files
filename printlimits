@@ -1,0 +1,3 @@
+#!/bin/bash
+echo -n "max num threads: "
+cat /proc/sys/kernel/threads-max

@@ -1,0 +1,5 @@
+#!/bin/bash
+# script to show your ip
+curl http://rl.ammyy.com/
+# curl https://api.ipify.org/
+echo ""

@@ -1,0 +1,10 @@
+#!/bin/bash
+url='http://www.google.com'
+while true
+do
+	nmcli con up xbs_14_xbstest2
+	#sleep 0.200
+	nmcli con down xbs_14_xbstest2
+	echo "============================================"
+	#wget  $url -O- &> /dev/null
+done
