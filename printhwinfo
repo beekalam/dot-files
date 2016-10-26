@@ -1,0 +1,16 @@
+#!/bin/bash
+echo -n "HDD info"
+echo "================================================================="
+echo "========= sudo hdparm -i /dev/sda ==============================="
+sudo hdparm -i  /dev/sda
+sudo lshw -c  storage -c disk
+cat /proc/partitions
+
+lsblk
+
+dmesg | grep SATA
+
+lspci
+dmesg | grep -i sata | grep 'link up'
+sudo hdparm -I /dev/sda | egrep "Model|speed|Transport"
+echo "================================================================="

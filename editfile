@@ -1,0 +1,14 @@
+#!/bin/bash
+# finds the path of a file and opens in editor
+
+echo $#
+usage="editfile filename"
+
+if [ $# -eq 0 ]
+then
+	echo $usage
+	exit
+fi
+
+filepath=`which $1`
+vim $filepath

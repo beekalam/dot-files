@@ -1,0 +1,12 @@
+#!/bin/bash
+echo "================================================================="
+echo "===============netstat -an | grep ESTABLISHED | wc -l==========="
+echo "open sockets: "
+netstat -an | grep ESTABLISHED | wc -l
+echo
+
+echo "===============netstat -an | grep TIME_WAIT | wc -l==========="
+echo "time_wait: "
+netstat -an | grep TIME_WAIT | wc -l
+echo
+echo "================================================================="
