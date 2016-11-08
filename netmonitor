@@ -1,0 +1,4 @@
+#!/bin/bash
+# count the number of files in this directories and all
+# subdirectories
+netstat -tunap

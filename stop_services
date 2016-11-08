@@ -28,5 +28,12 @@ sudo service tor stop
 echo "stopping samba..."
 sudo service samba stop
 sudo service samba-ad-dc stop
+echo "sotpping rediss..."
+sudo service redis-server stop
+echo "stopping fprobe..."
+sudo service fprobe stop
+echo "stopping freeradius..."
+sudo service freeradius stop
+
 
 
