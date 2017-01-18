@@ -1,0 +1,4 @@
+#!/bin/bash
+# changes tor ip
+# subdirectories
+printf "AUTHENTICATE \"password\"\r\nSIGNAL NEWNYM\r\n" | nc 127.0.0.1 9051
