@@ -1,0 +1,18 @@
+#!/bin/sh
+#set -euf -o pipefail
+
+##
+# Dig a domain's start of authority nameserver.
+#
+# Example:
+#
+#     dig example.com
+#     => ns.example.com
+#
+# Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
+# License: GPL
+# Updated: 2015-01-25
+##
+
+domain=$1
+dig +short soa "$domain" | cut -d' ' -f1

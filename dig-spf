@@ -1,0 +1,12 @@
+#!/bin/bash
+#set -euf -o pipefail -o xtrace
+
+##
+# Dig for a Sender Policy Framework (SPF) record.
+#
+# Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
+# License: GPL
+# Updated: 2015-01-25
+##
+
+dig +short -ttxt $@
