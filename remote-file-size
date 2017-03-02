@@ -1,0 +1,11 @@
+#!/bin/sh
+# http://stackoverflow.com/questions/6986085/get-file-size-of-a-file-to-wget-before-wget-ing-it
+
+if [ $# -ne 1 ] ; then
+	echo "Usage: $0 command url" >&2; exit 1
+fi
+
+filesize=$(wget $1 --spider --server-response -O - 2>&1 | sed -ne '/Content-Length/{s/.*: //;p}')
+echo "$filesize B"
+echo $(echo "scale=2; $filesize / 1024" | bc -l)" KB"
+echo $(echo "scale=2; $filesize / 1024 / 1024" | bc -l)" MB"
