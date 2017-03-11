@@ -1,0 +1,20 @@
+#!/bin/sh
+#set -euf -o pipefail
+
+##
+# Dig a domain's subdomains
+#
+# Example:
+#
+#     dig example.com
+#     => www.example.com, ftp.example.com, etc.
+#
+#
+# Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
+# License: GPL
+# Updated: 2015-01-25
+##
+
+domain=$1
+ns=`dig "$domain" soa | grep "^$domain" |  awk '{print $5}'`
+dig "@$ns" "$domain.com" axfr
