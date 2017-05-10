@@ -1,0 +1,24 @@
+#!/bin/bash
+set -euf -o pipefail
+
+##
+# Print the number of lines of a file.
+#
+# Syntax:
+#   wc-l <filename>
+#
+# Example:
+#   wc-1 foo.txt
+#   => 100
+#
+# Same as wc -1 if we just pick the first field:
+#
+#   wc -l /usr/share/dict/words | awk '{ print $1; }'
+#   => 100
+#
+# Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
+# License: GPL
+# Updated: 2015-01-25
+##
+
+echo '$=' | ed -s "$1"

@@ -1,0 +1,6 @@
+##
+# Make a directory with 'mkdir' then change into it with 'cd'.
+##
+
+unset CDPATH
+mkdir -p -v "$1"; cd "$1";

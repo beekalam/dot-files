@@ -1,0 +1,50 @@
+#!/bin/bash
+#set -euf -o pipefail
+
+##
+# wget a local mirror of a remote website.
+#
+# We use wget with these settings:
+#
+#  --mirror: turn on options suitable for mirroring.
+#            equivalent to -r -N -l inf --no-remove-listing.
+#
+#  -p: download all files that are necessary to properly display a given HTML page.
+#
+#  --convert-links: after the download, convert the links in document for local viewing.
+#
+#  -P ./LOCAL-DIR : save all the files and directories to the specified directory.
+#
+# From http://askubuntu.com/questions/20463/how-can-i-download-an-entire-website
+#
+# Some flags if you want to roll your own:
+#
+#    -m turns on mirroring options for mirroring a site locally
+#
+#    -c continues a previous download in case we've already downloaded some pages
+#
+#    -k converts absolute href to point to local ones for offline viewing
+#
+#    -E ensures files have .html extension after download.
+#    -np only downloads objects under /a/section/i/ and does not cache the whole site.
+#
+# N.b. another answer suggests these:
+#
+#  wget
+#     --recursive \
+#     --no-clobber \
+#     --page-requisites \
+#     --html-extension \
+#     --convert-links \
+#     --restrict-file-names=windows \
+#     --domains website.org \
+#     --no-parent \
+#
+# Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
+# License: GPL
+# Updated: 2015-01-25
+##
+
+local_dir=$1
+website_url=$2
+wget --mirror -p -c --convert-links -P "$local_dir" "$website_url"

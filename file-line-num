@@ -1,0 +1,33 @@
+#!/bin/sh
+#
+# Print a file's line at a given line number.
+#
+# Syntax:
+#
+#     file-line-num <file path> <line number> [line number] ...
+#
+# Example:
+#
+#     file-line-num myfile.txt 10
+#     => prints line 10 of myfile.txt
+#
+# Example:
+#
+#     file-line-num myfile.txt 10 20 30
+#     => prints line 10 of myfile.txt then line 20 then line 30
+#
+# Program: file-line-num
+# Version: 1.1.8
+# Created: 2011-11-19
+# Updated: 2016-02-04
+# License: GPL
+# Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
+##
+set -euf
+out () { printf %s\\n "$*" ; }
+
+file_path="$1"
+shift
+for line_num; do
+  out "$line_num p" | ed -s "$file_path"
+done

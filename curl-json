@@ -1,0 +1,24 @@
+#!/bin/bash
+set -euf -o pipefail
+
+##
+# Use curl with headers that accept json and set content-type to json.
+#
+# Example GET:
+#
+#   curl-json \
+#     http://example.com/items
+#
+# Example POST:
+#
+#   curl-json \
+#     -F key1=value1 \
+#     -F key2=value2 \
+#     http://example.com/items
+#
+# Contact: Joel Parker Henderson (joel@joelparkerhenderson.com)
+# License: GPL
+# Updated: 2015-01-25
+##
+
+curl -H "Accept: application/json" -H "Content-type: application/json" "$@"

@@ -28,4 +28,4 @@ items.reverse()
 
 for item in items:
     print item
-    print ("="*80)
+    print "="*80
