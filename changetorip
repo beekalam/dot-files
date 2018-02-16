@@ -1,4 +1,26 @@
 #!/bin/bash
 # changes tor ip
-# subdirectories
-printf "AUTHENTICATE \"password\"\r\nSIGNAL NEWNYM\r\n" | nc 127.0.0.1 9051
+
+# enable the control port by uncommenting:
+# ControlPort 9051
+# from /etc/tor/torrc
+
+# Set the empty password, otherwise it gives 515 Authentication failed: Wrong length on authentication cookie.. First run:
+
+# tor --hash-password ''
+# This outputs something like:
+
+# 16:D14CC89AD7848B8C60093105E8284A2D3AB2CF3C20D95FECA0848CFAD2
+# Now on /etc/tor/torrc update the line:
+
+# HashedControlPassword 16:D14CC89AD7848B8C60093105E8284A2D3AB2CF3C20D95FECA0848CFAD2
+# Restart Tor:
+	
+# sudo service tor restart
+# check that your IP changed
+
+# curl --socks5 127.0.0.1:9050 http://checkip.amazonaws.com/
+
+(echo authenticate '""'; echo signal newnym; echo quit) | nc localhost 9051
+
+#printf "AUTHENTICATE \"password\"\r\nSIGNAL NEWNYM\r\n" | nc 127.0.0.1 9051

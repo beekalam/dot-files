@@ -2,6 +2,7 @@
 # script to show your ip
 # curl ifconfig.me
 #curl http://rl.ammyy.com/
- curl https://api.ipify.org/
+curl	 http://checkip.amazonaws.com/
+#curl https://api.ipify.org/
 echo ""
 #curl whatismyip.org;echo
