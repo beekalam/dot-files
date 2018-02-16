@@ -16,7 +16,7 @@
     }, 
     "filter": {
         "regex": "Title: 'Recoll'", 
-        "isRecursive": false
+        "isRecursive": true
     }, 
     "type": "folder", 
     "showInTrayMenu": false

@@ -6,7 +6,7 @@
     "abbreviation": {
         "wordChars": "[\\w]", 
         "abbreviations": [
-            "1916"
+            "...1"
         ], 
         "immediate": false, 
         "ignoreCase": false, 

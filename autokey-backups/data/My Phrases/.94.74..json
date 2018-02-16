@@ -5,7 +5,9 @@
     "description": "94.74.", 
     "abbreviation": {
         "wordChars": "[\\w]", 
-        "abbreviations": [], 
+        "abbreviations": [
+            "...97"
+        ], 
         "immediate": false, 
         "ignoreCase": false, 
         "backspace": true, 
@@ -15,7 +17,9 @@
         "hotKey": null, 
         "modifiers": []
     }, 
-    "modes": [], 
+    "modes": [
+        1
+    ], 
     "showInTrayMenu": false, 
     "matchCase": false, 
     "filter": {

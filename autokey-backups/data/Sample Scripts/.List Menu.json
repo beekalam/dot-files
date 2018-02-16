@@ -1,5 +1,5 @@
 {
-    "usageCount": 12, 
+    "usageCount": 33, 
     "omitTrigger": false, 
     "prompt": false, 
     "description": "List Menu", 
@@ -12,9 +12,10 @@
         "triggerInside": false
     }, 
     "hotkey": {
-        "hotKey": "x", 
+        "hotKey": "a", 
         "modifiers": [
-            "<hyper>"
+            "<shift>", 
+            "<super>"
         ]
     }, 
     "modes": [

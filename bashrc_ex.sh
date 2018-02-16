@@ -9,3 +9,11 @@ export GOPATH=~/go
 
 #remapping capslock to escape
 xmodmap ~/bin/xmodmap
+
+
+
+# initialize git info
+init_git () {
+	git config --global user.email "beekalam@gmail.com"
+	git config --global user.name "beekalam"
+}

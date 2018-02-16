@@ -6,7 +6,7 @@
     "abbreviation": {
         "wordChars": "[\\w]", 
         "abbreviations": [
-            "...127"
+            "...01"
         ], 
         "immediate": false, 
         "ignoreCase": false, 
