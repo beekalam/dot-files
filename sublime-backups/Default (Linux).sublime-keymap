@@ -1,0 +1,54 @@
+[
+	{ "keys": ["f1"], "command": "prompt_select_workspace" },
+	// { "keys": ["f2"], "command": "toggle_fold_current"},
+	// Fold all code blocks
+	{ "keys": ["alt+m", "9"], "command": "fold_all" },
+	// Unfold all code blocks
+  	{ "keys": ["alt+m", "0"], "command": "unfold_all"},
+	// Toggle fold current code block
+  	{ "keys": ["alt+m", "t"], "command": "toggle_fold_current"},
+  	// { "keys": ["ctrl+x", "ctrl+x"], "command": "toggle_fold_current"}
+  	{ "keys": ["ctrl+f"], "command":"find_under_cursor"},
+  	//vintage escape
+	{ "keys": ["f", "d"], "command": "exit_insert_mode",
+	    "context":
+	    [
+	        { "key": "setting.command_mode", "operand": false },
+	        { "key": "setting.is_widget", "operand": false }
+	    ]
+	},
+
+	{ "keys": ["f", "s"], "command": "save",
+	    "context":
+	    [
+	        { "key": "setting.insert_mode", "operand": false },
+	        { "key": "setting.is_widget", "operand": false }
+	    ]
+	},
+	{ "keys": ["super+/"], "command": "extended_switcher",
+		 "args": {"list_mode": "windowd"} 
+	},
+	
+	{"keys": ["super+j"],"command":"move",
+		"args":{"by":"lines","forward":true,"extend":false}
+	},
+
+	{"keys":[";","r"],"command":"show_overlay",
+		"args":{"overlay":"goto","text":"@"},
+		"context":
+		[
+	        { "key": "setting.insert_mode", "operand": false },
+	        { "key": "setting.is_widget", "operand": false }
+		]
+	},
+	
+	{"keys":[";","p"],"command":"show_overlay",
+		 "args":{"overlay":"goto","show_files":true},
+		"context":
+		[
+	        { "key": "setting.insert_mode", "operand": false },
+	        { "key": "setting.is_widget", "operand": false }
+		]
+	}
+
+]

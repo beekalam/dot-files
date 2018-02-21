@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [ "$EUID" -ne 0 ]; then
+  echo '..............'
+  echo 'Going to run as root'
+  sudo "$HOME/bin/install-composer"
+  echo '..............'
+fi
+
+if [ "$EUID" -eq 0]; then
+
+	if [ -f '/usr/local/bin/composer' ]; then
+		echo 'composer already installed'
+		exit
+	else
+		echo 'Downloading composer.....'
+		wget --no-check-certificate https://getcomposer.org/composer.phar -O /tmp/composer.phar
+	fi
+
+	if [ -f '/tmp/composer.phar' ]; then
+		echo 'Moving to /user/local/bin'
+		mv /tmp/composer.phar '/usr/local/bin/composer'
+		chmod +x '/usr/local/bin/composer'
+	fi
+
+fi

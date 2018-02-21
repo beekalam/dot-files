@@ -16,3 +16,4 @@ alias gitl='git log'
 alias n.='gnome-open .'
 
 alias ssh20='ssh moh@192.168.1.20'
+alias ogd='cd /home/moh/opengrok_dirs/SRC_ROOT'
