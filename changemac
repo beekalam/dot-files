@@ -1,10 +1,20 @@
 #!/bin/bash
 # change the mac address
-# TODO: add argument for which interface to change
-# TODO: check to see if the user is in sudoers
-# TODO: check to see if macchanger is installed
-# TODO: check to see if the interface is up or down
-# TODO: add a usage  note
-sudo ifconfig wlan0 down
-macchanger wlan0 -a
-sudo ifconfig wlan0 up
+if [ $# -eq 0 ]
+then
+    echo "No arguments supplied"
+    exit 1
+fi
+
+
+if [ -z "$2" ]
+then
+   sudo ifconfig $1 down
+   sudo macchanger $1 -r
+   sudo ifconfig $1 up
+else
+    sudo ifconfig $1 down
+    sudo macchanger $1 -m $2
+    sudo ifconfig $1 up
+fi
+

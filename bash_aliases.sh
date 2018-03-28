@@ -15,5 +15,16 @@ alias gits='git status'
 alias gitl='git log'
 alias n.='gnome-open .'
 
+<<<<<<< d4719eb02b8c8b750697a5719c09361d33729e6d
 alias ssh20='ssh moh@192.168.1.20'
 alias ogd='cd /home/moh/opengrok_dirs/SRC_ROOT'
+=======
+alias whatismytorip="torify whatismyip"
+
+alias ssh20='ssh moh@192.168.1.20'
+alias phplicenseserver2="/opt/phpstorm2017/Crack/license_server/linux/dvt-jb_licsrv.linux.amd64"
+alias jadex="nohup /home/moh/Documents/android_apk/jadx-0.6.1/bin/jadx-gui 2>&1 &"
+alias cdfana="cd /home/moh/src/fana"
+alias cdsda2="cd /media/moh/sda2"
+alias mac-random="sudo /home/moh/bin/changemac wlp3s0"
+>>>>>>> change-mac and bash-aliases
