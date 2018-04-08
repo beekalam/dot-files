@@ -1,2 +1,2 @@
 # Enter script code
-keyboard.send_key("<up>")
+keyboard.send_keys("<ctrl>+<page_up>")

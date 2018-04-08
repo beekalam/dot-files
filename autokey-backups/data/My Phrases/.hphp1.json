@@ -1,30 +1,31 @@
 {
-    "usageCount": 28, 
-    "omitTrigger": false, 
+    "usageCount": 4, 
+    "omitTrigger": true, 
     "prompt": false, 
-    "description": "down", 
+    "description": "hphp", 
     "abbreviation": {
         "wordChars": "[\\w]", 
-        "abbreviations": [], 
+        "abbreviations": [
+            "hphp"
+        ], 
         "immediate": false, 
         "ignoreCase": false, 
         "backspace": true, 
         "triggerInside": false
     }, 
     "hotkey": {
-        "hotKey": "j", 
-        "modifiers": [
-            "<super>"
-        ]
+        "hotKey": null, 
+        "modifiers": []
     }, 
     "modes": [
-        3
+        1
     ], 
     "showInTrayMenu": false, 
+    "matchCase": false, 
     "filter": {
         "regex": null, 
         "isRecursive": false
     }, 
-    "type": "script", 
-    "store": {}
+    "type": "phrase", 
+    "sendMode": "kb"
 }
