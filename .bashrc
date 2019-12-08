@@ -104,6 +104,10 @@ alias proc.de="sudo protonvpn connect --cc DE -p udp"
 alias proc.nl="sudo protonvpn connect --cc NL -p udp"
 alias proc.uae="sudo protonvpn connect --cc AE -p udp"
 alias pro.reset="prod && proc.nl && whatismyip"
+#---------- nmcli ------------------
+alias vpnup="nmcli connection up de-vpn"
+alias vpndown="nmcli connection down de-vpn"
+#-----------------------------------
 #----------python,virtualenv--------
 alias activate="source venv/bin/activate"
 #-----------------------------------
@@ -168,6 +172,13 @@ PATH=/opt/lampp/bin:$PATH
 PATH=/home/moh/.local/bin:$PATH
 PATH=$PATH:/usr/local/go/bin
 # ------------ functions ---------------
+function mount_drives {
+	sudo mount -t ntfs -o rw,nosuid,nodev,relatime,user_id=1000,group_id=1000,default_permissions,allow_other,uhelper=udisks2 /dev/sda5 /media/moh/sam
+	sudo mount -t ntfs -o rw,nosuid,nodev,relatime,user_id=1000,group_id=1000,default_permissions,allow_other,uhelper=udisks2 /dev/sdc1 /media/moh/tos 
+
+	#sudo mount -t ntfs-3g  /dev/sda5 /media/moh/sam
+	#sudo mount -t ntfs-3g /dev/sdc1 /media/moh/tos
+}
 
 function myi3init {
 	echo "Setting monitors..."
@@ -206,6 +217,7 @@ function mygnomeinit {
     #gsettings set org.gnome.desktop.peripherals.keyboard delay 130
 }
 
+
 function open {
 	if [ $# -eq 0 ]
 	then
@@ -218,6 +230,8 @@ function open {
 
 }
 
+# Allow Composer to use almost as much RAM as Chrome.
+#export COMPOSER_MEMORY_LIMIT=-1
 source ~/.bash_utils
 
 # =================================================
@@ -245,4 +259,3 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
-pwd
