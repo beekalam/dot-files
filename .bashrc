@@ -137,6 +137,7 @@ alias killminerfs="sudo pkill miner"
 alias punit="./vendor/bin/phpunit "
 alias setphp72="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-7.2 lampp"
 alias setphp74="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-7.4 lampp"
+alias pac="php artisan cache:clear && php artisan config:clear && php artisan route:clear && php artisan view:clear &&  php artisan config:cache"
 #--------------------------------
 #alias emrenice="sudo renice -20 -p `echo pgrep emacs`"
 alias grepi="grep -i"
@@ -232,7 +233,7 @@ function open {
 
 # Allow Composer to use almost as much RAM as Chrome.
 #export COMPOSER_MEMORY_LIMIT=-1
-source ~/.bash_utils
+source ~/.bash_utils.sh
 
 # =================================================
 
