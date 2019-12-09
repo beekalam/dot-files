@@ -173,11 +173,11 @@ PATH=/home/moh/.local/bin:$PATH
 PATH=$PATH:/usr/local/go/bin
 # ------------ functions ---------------
 function mount_drives {
-	sudo mount -t ntfs -o rw,nosuid,nodev,relatime,user_id=1000,group_id=1000,default_permissions,allow_other,uhelper=udisks2 /dev/sda5 /media/moh/sam
-	sudo mount -t ntfs -o rw,nosuid,nodev,relatime,user_id=1000,group_id=1000,default_permissions,allow_other,uhelper=udisks2 /dev/sdc1 /media/moh/tos 
+	#sudo mount -t ntfs -o rw,nosuid,nodev,relatime,user_id=1000,group_id=1000,default_permissions,allow_other,uhelper=udisks2 /dev/sda5 /media/moh/sam
+	#sudo mount -t ntfs -o rw,nosuid,nodev,relatime,user_id=1000,group_id=1000,default_permissions,allow_other,uhelper=udisks2 /dev/sdc1 /media/moh/tos 
 
-	#sudo mount -t ntfs-3g  /dev/sda5 /media/moh/sam
-	#sudo mount -t ntfs-3g /dev/sdc1 /media/moh/tos
+	sudo mount -t ntfs-3g  /dev/sda5 /media/moh/sam
+	sudo mount -t ntfs-3g /dev/sdc1 /media/moh/tos
 }
 
 function myi3init {
