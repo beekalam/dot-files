@@ -2,6 +2,7 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # If not running interactively, don't do anything
 case $- in
@@ -259,7 +260,7 @@ function open {
 
 # Allow Composer to use almost as much RAM as Chrome.
 #export COMPOSER_MEMORY_LIMIT=-1
-source ~/.bash_utils.sh
+source ${BASEDIR}/.bash_utils.sh
 
 # =================================================
 
