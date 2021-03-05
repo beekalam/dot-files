@@ -92,6 +92,7 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias notes="/media/moh/sam/src/pyqt-playground/venv/bin/python /media/moh/sam/src/pyqt-playground/Notes.py"
 
 # ====================================
 alias emacsnw="emacs -nw"
@@ -111,11 +112,13 @@ alias vpndown="nmcli connection down de-vpn"
 #----------python,virtualenv--------
 alias activate="source venv/bin/activate"
 #-----------------------------------
+alias mount_ramdisk="sudo mount -t tmpfs -o size=1G tmpfs /media/ramdisk/"
 alias bashrcreload="source ~/.bashrc"
 alias bashrcedit="vim ~/.bashrc"
 alias hs="history"
 alias hsg="history | grep "
 alias als="alias | grep "
+alias cppath="pwd | xsel -b"
 alias xampp="sudo /opt/lampp/xampp"
 alias xampp.manager="sudo /opt/lampp/manager-linux-x64.run"
 alias cleanservices="sudo service anydesk stop && \
@@ -173,6 +176,7 @@ PATH=/opt/lampp/bin:$PATH
 PATH=/home/moh/.local/bin:$PATH
 PATH=$PATH:/usr/local/go/bin
 # ------------ functions ---------------
+
 function mount_drives {
 	#sudo mount -t ntfs -o rw,nosuid,nodev,relatime,user_id=1000,group_id=1000,default_permissions,allow_other,uhelper=udisks2 /dev/sda5 /media/moh/sam
 	#sudo mount -t ntfs -o rw,nosuid,nodev,relatime,user_id=1000,group_id=1000,default_permissions,allow_other,uhelper=udisks2 /dev/sdc1 /media/moh/tos 
@@ -193,6 +197,23 @@ function myi3init {
 	killminerfs
 	echo "setting keyboard speed..."
 	xset r rate 190 110
+	echo "Mounting drives..."
+	mount_drives
+}
+
+function myi3init_2_monitors {
+	echo "Setting monitors..."
+	echo "Cleaning unnecessary evolution services...."
+	evoclean
+	setkeyboardlayouts
+	cleanservices
+	xmodmap ~/.xmodmaprc
+	echo "killing minerfs service ..."
+	killminerfs
+	echo "setting keyboard speed..."
+	xset r rate 190 110
+	echo "Mounting drives..."
+	mount_drives
 }
 
 function myi3init_single_monitor {
@@ -205,13 +226,18 @@ function myi3init_single_monitor {
 	killminerfs
 	echo "setting keyboard speed..."
 	xset r rate 190 110
+	echo "Mounting drives..."
+	mount_drives
 }
 
 function mygnomeinit {
     xmodmap ~/.xmodmaprc
 
     #xset r rate 190 110
+
+    # repeat-interval default is 30
     gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval  20
+    # delay default is 500
     gsettings set org.gnome.desktop.peripherals.keyboard delay 170
 
     #gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 15 
