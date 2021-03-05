@@ -175,6 +175,9 @@ alias dkritc='docker run --rm -it -v $PWD:/cwd -w /cwd '
 PATH=/opt/lampp/bin:$PATH
 PATH=/home/moh/.local/bin:$PATH
 PATH=$PATH:/usr/local/go/bin
+# pip3 virtualenv
+PATH=$PATH:~/.local/bin
+
 # ------------ functions ---------------
 
 function mount_drives {
