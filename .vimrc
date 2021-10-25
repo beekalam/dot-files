@@ -11,7 +11,10 @@ set nu
 filetype indent plugin on
 
 
-let mapleader=","
+let mapleader=" "
 map <Leader>qq :q<enter>
-map <Leader>ex :Ex<enter>
+map <Leader>ff :Ex<enter>
+map <Leader>fs :w<enter>
+
 imap fd <esc>
+
