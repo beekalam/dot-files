@@ -3,24 +3,105 @@ set hlsearch
 set incsearch
 set ignorecase
 set smartcase
+set visualbell
 
 let mapleader=" "
 nnoremap <Leader><space> :noh<cr>
 map <Leader>. :w<enter>
 map <Leader>c "*yy
 map <Leader>v "*p
-map <Leader>fl f(l
-map <Leader>fh f)h
+;map <Leader>fl f(l
+;map <Leader>fh f)h
 map <Leader>j ]m
 map <Leader>k [m
 
-map ,,a <s-a>
-imap ,,a <esc><s-a>
-nnoremap ,,z :noh<cr>
+; AceJump actions
+; activates acejump
+map ,,f :action AceAction<CR>
+imap ,,f <esc>:action AceAction<CR>
+
+; activate target mode
+map ,,t :action AceTargetAction<CR>
+imap ,,t <esc>:action AceTargetAction<CR>
+
+; activate line mode
+map ,,g :action AceLineAction<CR>
+imap ,,g <esc>:action AceTargetAction<CR>
+
+;;;;;;;;;;;;;;
+map <Leader>sj :action FileStructurePopup<CR>
+map <Leader>sp :action GotoSymbol<CR>
+map <Leader>ss :action Find<CR>
+;; clear highlights
+map <Leader>sc :noh<cr>
+map <Leader>pf :action GotoFile<CR>
+map <Leader>bb :action Switcher<CR>
+map <Leader>bd :action CloseContent<CR>
+map <Leader>bH :action SplitVertically<CR>
+map <Leader>bJ :action SplitHorizontally<CR>
+map <Leader>w- :action SplitHorizontally<CR>
+map <Leader>w/ :action SplitVertically<CR>
+map <Leader>/  :action FindInPath<CR>
+map <Leader>ft :action SelectInProjectView<CR>
+map <Leader>fw :action EditSourceInNewWindow<CR>
+map <Leader>fn :action NewFile<CR>
+; delete does not work
+;map <Leader>fd :action $Delete<CR>
+map <Leader>fL :action RevealIn<CR>
+map <Leader>fT :action SelectInProjectView<CR>
+map <Leader>fr :action SelectInProjectView<CR>
+;RecentFiles
+map <Leader>fy :action CopyReferencePopupGroup<CR>
+map <Leader>fj :action ShowNavBar<CR>
+map <Leader>fed :action ShowSettings<CR>
+map <Leader>fs :action SaveAll<CR>
+map <Leader>' :action ActivateTerminalToolWindow<CR>
+map <Leader>ij :action EditorStartNewLine<CR>
+map <Leader>ik :action EditorStartNewLineBefore<CR>
+map <Leader>is :action InsertLiveTemplate<CR>
+map <Leader>j+ :action ReformatCode<CR>
+map <Leader>ji :action FileStructurePopup<CR>
+map <Leader>jl :action AceLineAction<CR>
+map <Leader>jj :action AceAction<CR>
+map <Leader>jn :action EditorSplitLine<CR>
+map <Leader>jI :action GotoSymbol<CR>
+map <Leader>jc :action JumpToLastChange<CR>
+map <Leader>jf :action GotoAction<CR>
+map <Leader>xR :action Refactorings.QuickListPopupAction<CR>
+map <Leader>xr :action RenameElement<CR>
+map <Leader>; :action CommentByLineComment<CR>
+map <Leader>pp :action ManageRecentProjects<CR>
+map <Leader>pR :action ReplaceInPath<CR>
+map <Leader>fR :action RenameFile<CR>
+;;;;;;;;;;;
+map <Leader>oi :action QuickImplementations<CR>
+map <Leader>oe :action RecentLocations<CR>
+map <Leader>ov :action PasteMultiple<CR>
+map <Leader>oh :action HideActiveWindow<CR>
+map <Leader>os :action SurroundWith<CR>
+map <Leader>og :action Generate<CR>
+map <Leader>oa :action ShowIntentionActions<CR>
+map <Leader>ogg :action GotoDeclaration<CR>
+map <Leader>or :action Run<CR> 
+map <Leader>oc :action RunClass<CR>
+
+;map <Leader>; :action NewElement<CR>
+
+map ,a <s-a>
+imap ,a <esc><s-a>
 
 
 ; split tag
-map <Leader>st <esc>vitxi<cr><esc>pset ideajoin
+; map <Leader>st <esc>vitxi<cr><esc>pset ideajoin
 
-set timeoutlen=300
+set timeoutlen=500
 set easymotion
+set ReplaceWithRegister
+set commentary
+set NERDTree
+set surround
+;set exchange
+set multiple-cursors
+set textobj-entire
+nnoremap <leader>pt :NERDTreeFocus<CR>
+map <leader>jw <Plug>(easymotion-w)<CR>
