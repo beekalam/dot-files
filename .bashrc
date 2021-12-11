@@ -9,6 +9,7 @@ case $- in
       *) return;;
 esac
 
+# @History
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth:erasedups
@@ -19,6 +20,10 @@ shopt -s histappend
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=50000
 HISTFILESIZE=50000
+
+
+# ignore common commands
+export HISTIGNORE=":pwd:id:uptime:ls:clear:history:cd:"
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -85,100 +90,16 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# colored GCC warnings and errors
-#export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-alias notes="/media/moh/sam/src/pyqt-playground/venv/bin/python /media/moh/sam/src/pyqt-playground/Notes.py"
-
-# ====================================
-alias emacsnw="emacs -nw"
-alias api="sudo apt install"
-# ------------ protovpn --------------
-alias proc="sudo protonvpn connect"
-alias prod="sudo protonvpn disconnect"
-alias pros="sudo protonvpn status"
-alias proc.de="sudo protonvpn connect --cc DE -p udp"
-alias proc.nl="sudo protonvpn connect --cc NL -p udp"
-alias proc.uae="sudo protonvpn connect --cc AE -p udp"
-alias pro.reset="prod && proc.nl && whatismyip"
-#---------- nmcli ------------------
-alias vpnup="nmcli connection up de-vpn"
-alias vpndown="nmcli connection down de-vpn"
-#-----------------------------------
-#----------python,virtualenv--------
-alias activate="source venv/bin/activate"
-#-----------------------------------
-alias mount_ramdisk="sudo mount -t tmpfs -o size=1G tmpfs /media/ramdisk/"
-alias bashrcreload="source ~/.bashrc"
-alias bashrcedit="vim ~/.bashrc"
-alias hs="history"
-alias hsg="history | grep "
-alias als="alias | grep "
-alias cppath="pwd | xsel -b"
-alias xampp="sudo /opt/lampp/xampp"
-alias xampp.manager="sudo /opt/lampp/manager-linux-x64.run"
-alias cleanservices="sudo service anydesk stop && \
-                                  sudo service snapd stop && \
-				  sudo service libvirtd stop"
-alias ..="cd .."
-alias secondmonitoronly="xrandr --output VGA-0  --auto --output LVDS-0 --off"
-alias firstmonitoronly="xrandr --output LVDS-0  --auto --output VGA-0 --off"
-# clean up evolution services that is not needed in i3wm
-alias evoclean="systemctl --user stop evolution-addressbook-factory &&  systemctl --user stop evolution-calendar-factory &&  systemctl --user stop evolution-source-registry"
-
-# keyboard shortcuts for i3wm
-alias setkeyboardlayouts="setxkbmap -option 'grp:win_space_toggle' 'us,ir'"
-alias killminerfs="sudo pkill miner"
-
-# alias myi3init="secondmonitoronly && evoclean && setkeyboardlayouts && cleanservices && xmodmap ~/.xmodmaprc && killminerfs && xset r rate 190 40"
-
-# ---------- php laravel -----------
-alias punit="./vendor/bin/phpunit "
-alias setphp72="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-7.2 lampp"
-alias setphp74="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-7.4 lampp"
-alias pac="php artisan cache:clear && php artisan config:clear && php artisan route:clear && php artisan view:clear &&  php artisan config:cache"
-#--------------------------------
-#alias emrenice="sudo renice -20 -p `echo pgrep emacs`"
-alias grepi="grep -i"
-alias mongostart="sudo systemctl start mongod.service"
-alias mongodstop="sudo systemctl stop mongod.service"
-alias suai="sudo apt install -y"
-alias sus="sudo systemctl "
-alias susstart="sudo systemctl start"
-alias susstop="sudo systemctl stop"
-alias susstart="sudo systemctl start"
-alias susstatus="sudo systemctl status"
-alias whatismyip="curl ipinfo.io"
-alias pingg="ping google.com"
-#-- docker aliases
-alias dk='docker'
-alias dklc='docker ps -l'  # List last Docker container
-alias dklcid='docker ps -l -q'  # List last Docker container ID
-alias dklcip='docker inspect -f "{{.NetworkSettings.IPAddress}}" $(docker ps -l -q)'  # Get IP of last Docker container
-alias dkps='docker ps'  # List running Docker containers
-alias dkpsa='docker ps -a'  # List all Docker containers
-alias dki='docker images'  # List Docker images
-alias dkrmac='docker rm $(docker ps -a -q)'  # Delete all Docker containers
-alias dkelc='docker exec -it $(dklcid) bash --login' # Enter last container (works with Docker 1.3 and above)
-alias dkrmflast='docker rm -f $(dklcid)'
-alias dkbash='dkelc'
-alias dkex='docker exec -it ' # Useful to run any commands into container without leaving host
-alias dkri='docker run --rm -i '
-alias dkric='docker run --rm -i -v $PWD:/cwd -w /cwd '
-alias dkrit='docker run --rm -it '
-alias dkritc='docker run --rm -it -v $PWD:/cwd -w /cwd '
 # lampp server shortcuts
-PATH=/opt/lampp/bin:$PATH
-PATH=/home/moh/.local/bin:$PATH
+PATH=$PATH:/opt/lampp/bin
 PATH=$PATH:/usr/local/go/bin
 # pip3 virtualenv
 PATH=$PATH:~/.local/bin
+# go
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
 
-# ------------ functions ---------------
+# ------------ @functions ---------------
 
 function mount_drives {
 	#sudo mount -t ntfs -o rw,nosuid,nodev,relatime,user_id=1000,group_id=1000,default_permissions,allow_other,uhelper=udisks2 /dev/sda5 /media/moh/sam
@@ -246,6 +167,14 @@ function mygnomeinit {
     #gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 15 
     #gsettings set org.gnome.desktop.peripherals.keyboard delay 130
 }
+function set_nextdns_for_vpn {
+	vpn_id=`nmcli con show --active | grep -i vpn | grep -v 'dummy' | awk '{print $3}'`
+	if [ ! -z "$vpn_id" ]
+	then
+		nmcli connection modify "$vpn_id" ipv4.ignore-auto-dns true
+		nmcli connection modify "$vpn_id" ipv4.dns 45.90.28.28,45.90.30.28
+	fi
+}
 
 
 function open {
@@ -253,16 +182,42 @@ function open {
 	then
 		echo "no arguments supplied"
 	else
-		#nohup $1 >/dev/null 2>&1 & 
+		#nohup $1 >/dev/null 2>&1 &
 		nohup $1 >/dev/null 2>&1 &
-		disown 
+		disown
 	fi
 
 }
 
+function test_spacemacs {
+	HOME=/mnt/11D3A2BE6C7F0676/emacs_test/spacemacs-test emacs >/dev/null 2>&1 &
+	disown
+}
+
+function vanilla_emacs {
+	  HOME=/mnt/11D3A2BE6C7F0676/emacs_test/vanilla_emacs emacs >/dev/null 2>&1 &
+	  disown
+}
+
+function doom_emacs {
+	  HOME=/mnt/11D3A2BE6C7F0676/emacs_test/emacs-dom emacs >/dev/null 2>&1 &
+    disown
+}
+
+
 # Allow Composer to use almost as much RAM as Chrome.
-#export COMPOSER_MEMORY_LIMIT=-1
+# export COMPOSER_MEMORY_LIMIT=-1
 source ${BASEDIR}/.bash_utils.sh
+[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+# @variables
+# man pages in color
+export LESS_TERMCAP_mb=$'\E[01;31m'
+export LESS_TERMCAP_md=$'\E[01;31m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[01;44;33m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[01;32m'
 
 # =================================================
 
@@ -289,3 +244,8 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# tabtab source for electron-forge package
+# uninstall by removing these lines or running `tabtab uninstall electron-forge`
+[ -f /media/moh/11D3A2BE6C7F06761/tmp/clipmaster-fem-v2/node_modules/tabtab/.completions/electron-forge.bash ] && . /media/moh/11D3A2BE6C7F06761/tmp/clipmaster-fem-v2/node_modules/tabtab/.completions/electron-forge.bash
+eval "$(pyenv init -)"
