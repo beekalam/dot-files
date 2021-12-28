@@ -69,6 +69,9 @@ alias setphp74="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-7.4 lampp
 alias setphp8="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-8 lampp"
 alias pac="php artisan cache:clear && php artisan config:clear && php artisan route:clear && php artisan view:clear &&  php artisan config:cache"
 #--------------------------------
+alias grm="go run main.go"
+#--------------------------------
+
 #alias emrenice="sudo renice -20 -p `echo pgrep emacs`"
 alias grepi="grep -i"
 alias mongostart="sudo systemctl start mongod.service"
@@ -81,7 +84,7 @@ alias susstart="sudo systemctl start"
 alias susstatus="sudo systemctl status"
 alias whatismyip="curl ipinfo.io"
 alias pingg="ping google.com"
-#-- docker aliases
+#-- @docker aliases
 alias dk='docker'
 alias dklc='docker ps -l'  # List last Docker container
 alias dklcid='docker ps -l -q'  # List last Docker container ID
@@ -89,7 +92,7 @@ alias dklcip='docker inspect -f "{{.NetworkSettings.IPAddress}}" $(docker ps -l 
 alias dkps='docker ps'  # List running Docker containers
 alias dkpsa='docker ps -a'  # List all Docker containers
 alias dki='docker images'  # List Docker images
-alias dkrmac='docker rm $(docker ps -a -q)'  # Delete all Docker containers
+alias dkrmac='docker rm -f $(docker container ls -aq)'  # Delete all Docker containers
 alias dkelc='docker exec -it $(dklcid) bash --login' # Enter last container (works with Docker 1.3 and above)
 alias dkrmflast='docker rm -f $(dklcid)'
 alias dkbash='dkelc'
@@ -98,3 +101,8 @@ alias dkri='docker run --rm -i '
 alias dkric='docker run --rm -i -v $PWD:/cwd -w /cwd '
 alias dkrit='docker run --rm -it '
 alias dkritc='docker run --rm -it -v $PWD:/cwd -w /cwd '
+
+
+
+alias vmtouch_vscode='vmtouch -vt /usr/share/code'
+alias vmtouch_emacs='vmtouch -vt ~/.emacs.d'
