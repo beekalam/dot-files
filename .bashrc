@@ -23,7 +23,7 @@ HISTFILESIZE=50000
 
 
 # ignore common commands
-export HISTIGNORE=":pwd:id:uptime:ls:clear:history:cd:"
+export HISTIGNORE=":pwd:id:uptime:ls:clear:history:cd:ranger:which:file:mv"
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -210,6 +210,10 @@ function doom_emacs {
 source ${BASEDIR}/.bash_utils.sh
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 # @variables
+# define preferred tools
+export EDITOR=vim
+export PAGER=less
+
 # man pages in color
 export LESS_TERMCAP_mb=$'\E[01;31m'
 export LESS_TERMCAP_md=$'\E[01;31m'
@@ -248,4 +252,4 @@ fi
 # tabtab source for electron-forge package
 # uninstall by removing these lines or running `tabtab uninstall electron-forge`
 [ -f /media/moh/11D3A2BE6C7F06761/tmp/clipmaster-fem-v2/node_modules/tabtab/.completions/electron-forge.bash ] && . /media/moh/11D3A2BE6C7F06761/tmp/clipmaster-fem-v2/node_modules/tabtab/.completions/electron-forge.bash
-eval "$(pyenv init -)"
+[ -f ~/.pyenv/bin/pyenv ] && eval "$(pyenv init -)"
