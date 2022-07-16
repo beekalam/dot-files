@@ -1,3 +1,25 @@
+
+function open {
+	  if [ $# -eq 0 ]
+	  then
+		    echo "no arguments supplied"
+	  else
+		    #nohup $1 >/dev/null 2>&1 &
+		    nohup $1 >/dev/null 2>&1 &
+		    disown
+	  fi
+
+}
+
+function test_spacemacs {
+	  HOME=/mnt/11D3A2BE6C7F0676/emacs_test/spacemacs-test emacs >/dev/null 2>&1 &
+	  disown
+}
+
+function doom_emacs {
+	  HOME=/mnt/11D3A2BE6C7F0676/emacs_test/emacs-dom emacs >/dev/null 2>&1 &
+    disown
+}
 function mkcd {
     mkdir $1
     cd $1
@@ -20,15 +42,10 @@ function alert_on_low_battery {
     fi
 }
 
-function update_vs_code {
-    wget https://vscode-update.azurewebsites.net/latest/linux-deb-x64/stable -O /tmp/code_latest_amd64.deb
-    sudo dpkg -i /tmp/code_latest_amd64.deb
-}
-
 function pgrep_renice {
     process=$1
     niceness=$2
-    
+
     while IFS= read -r pid
     do
         echo $pid

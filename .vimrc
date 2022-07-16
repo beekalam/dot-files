@@ -67,5 +67,8 @@ let mapleader=","
 map <Leader>qq :q<enter>
 map <Leader>ff :Ex<enter>
 map <Leader>fs :w<enter>
+map <Leader>' :shell<enter>
+map <Leader>bb :buffers<enter>
+map <Leader>bd :bd<enter>
 
 imap fd <esc>

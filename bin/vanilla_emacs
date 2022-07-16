@@ -1,0 +1,4 @@
+#!/bin/bash
+
+HOME=/mnt/11D3A2BE6C7F0676/emacs_test/vanilla_emacs emacs >/dev/null 2>&1 &
+disown

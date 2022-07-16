@@ -95,115 +95,17 @@ PATH=$PATH:/opt/lampp/bin
 PATH=$PATH:/usr/local/go/bin
 # pip3 virtualenv
 PATH=$PATH:~/.local/bin
+
+PATH=$PATH:~/.dot-files/bin/
 # go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 
-# ------------ @functions ---------------
+#zig
+export PATH=$PATH:/opt/zig-linux-x86_64-0.9.1
+export PATH=$PATH:/opt/zls
 
-function mount_drives {
-	#sudo mount -t ntfs -o rw,nosuid,nodev,relatime,user_id=1000,group_id=1000,default_permissions,allow_other,uhelper=udisks2 /dev/sda5 /media/moh/sam
-	#sudo mount -t ntfs -o rw,nosuid,nodev,relatime,user_id=1000,group_id=1000,default_permissions,allow_other,uhelper=udisks2 /dev/sdc1 /media/moh/tos 
-
-	sudo mount -t ntfs-3g  /dev/sda5 /media/moh/sam
-	sudo mount -t ntfs-3g /dev/sdc1 /media/moh/tos
-}
-
-function myi3init {
-	echo "Setting monitors..."
-	secondmonitoronly
-	echo "Cleaning unnecessary evolution services...."
-	evoclean
-	setkeyboardlayouts
-	cleanservices
-	xmodmap ~/.xmodmaprc
-	echo "killing minerfs service ..."
-	killminerfs
-	echo "setting keyboard speed..."
-	xset r rate 190 110
-	echo "Mounting drives..."
-	mount_drives
-}
-
-function myi3init_2_monitors {
-	echo "Setting monitors..."
-	echo "Cleaning unnecessary evolution services...."
-	evoclean
-	setkeyboardlayouts
-	cleanservices
-	xmodmap ~/.xmodmaprc
-	echo "killing minerfs service ..."
-	killminerfs
-	echo "setting keyboard speed..."
-	xset r rate 190 110
-	echo "Mounting drives..."
-	mount_drives
-}
-
-function myi3init_single_monitor {
-	echo "Cleaning unnecessary evolution services...."
-	evoclean
-	setkeyboardlayouts
-	cleanservices
-	xmodmap ~/.xmodmaprc
-	echo "killing minerfs service ..."
-	killminerfs
-	echo "setting keyboard speed..."
-	xset r rate 190 110
-	echo "Mounting drives..."
-	mount_drives
-}
-
-function mygnomeinit {
-    xmodmap ~/.xmodmaprc
-
-    #xset r rate 190 110
-
-    # repeat-interval default is 30
-    gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval  20
-    # delay default is 500
-    gsettings set org.gnome.desktop.peripherals.keyboard delay 170
-
-    #gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 15 
-    #gsettings set org.gnome.desktop.peripherals.keyboard delay 130
-}
-function set_nextdns_for_vpn {
-	vpn_id=`nmcli con show --active | grep -i vpn | grep -v 'dummy' | awk '{print $3}'`
-	if [ ! -z "$vpn_id" ]
-	then
-		nmcli connection modify "$vpn_id" ipv4.ignore-auto-dns true
-		nmcli connection modify "$vpn_id" ipv4.dns 45.90.28.28,45.90.30.28
-	fi
-}
-
-
-function open {
-	if [ $# -eq 0 ]
-	then
-		echo "no arguments supplied"
-	else
-		#nohup $1 >/dev/null 2>&1 &
-		nohup $1 >/dev/null 2>&1 &
-		disown
-	fi
-
-}
-
-function test_spacemacs {
-	HOME=/mnt/11D3A2BE6C7F0676/emacs_test/spacemacs-test emacs >/dev/null 2>&1 &
-	disown
-}
-
-function vanilla_emacs {
-	  HOME=/mnt/11D3A2BE6C7F0676/emacs_test/vanilla_emacs emacs >/dev/null 2>&1 &
-	  disown
-}
-
-function doom_emacs {
-	  HOME=/mnt/11D3A2BE6C7F0676/emacs_test/emacs-dom emacs >/dev/null 2>&1 &
-    disown
-}
-
+. /home/moh/z/z.sh
 
 # Allow Composer to use almost as much RAM as Chrome.
 # export COMPOSER_MEMORY_LIMIT=-1
@@ -253,3 +155,8 @@ fi
 # uninstall by removing these lines or running `tabtab uninstall electron-forge`
 [ -f /media/moh/11D3A2BE6C7F06761/tmp/clipmaster-fem-v2/node_modules/tabtab/.completions/electron-forge.bash ] && . /media/moh/11D3A2BE6C7F06761/tmp/clipmaster-fem-v2/node_modules/tabtab/.completions/electron-forge.bash
 [ -f ~/.pyenv/bin/pyenv ] && eval "$(pyenv init -)"
+
+# BEGIN SNIPPET: Platform.sh CLI configuration
+HOME=${HOME:-'/home/moh'}
+export PATH="$HOME/"'.platformsh/bin':"$PATH"
+if [ -f "$HOME/"'.platformsh/shell-config.rc' ]; then . "$HOME/"'.platformsh/shell-config.rc'; fi # END SNIPPET

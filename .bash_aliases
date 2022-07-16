@@ -12,9 +12,25 @@ function bashAliases() {
   alias ..="cd .."
   alias ...="cd ../.."
   alias ....="cd ../../.."
+  alias grepi="grep -i"
+  alias path="echo $PATH | tr ":" '\n'"
+  alias xampp="sudo /opt/lampp/xampp"
+  alias lsi="ls -lh | grep -i "
+  #-- @pdfsam
+  alias pdfsam='nohup java -jar /mnt/11D3A2BE6C7F0676/opt/pdfsam-4.2.12-linux/pdfsam-basic-4.2.12.jar >/dev/null 2>&1 &'
+  alias vmtouch_vscode='vmtouch -vt /usr/share/code'
+  alias vmtouch_emacs='vmtouch -vt /usr/local/bin/emacs && vmtouch -vt ~/.emacs.d/layers/ vmtouch -vt ~/.emacs.d/eln-cache'
   # copy PWD to clipboard
   alias cpwd='echo "$PWD" | xsel --clipboard'
-  alias mount_ramdisk="sudo mount -t tmpfs -o size=2G tmpfs /media/ramdisk/"
+  alias cppath="pwd | xsel -b"
+  alias coderenice='for pi in `pgrep "code"`; do sudo renice -n -20 $pi; done'
+  # ---------- @emacs-------------
+  alias emacsrenice='for pi in `pgrep "emacs"`; do sudo renice -n -20 $pi; done'
+  alias notes="/home/moh/src/python/znotes/venv/bin/python /home/moh/src/python/znotes/Notes.py"
+  alias cdd="cd /run/user/1000/gvfs/smb-share:server=192.168.1.110,share=d,user=moh"
+  alias cde="cd /run/user/1000/gvfs/smb-share:server=192.168.1.110,share=e,user=moh"
+  alias emacsnw="emacs -nw"
+  alias mount_ramdisk="sudo mount -t tmpfs -o size=1G tmpfs /media/ramdisk/"
   alias bashrcreload="source ~/.bashrc"
   alias aliasreload="source ~/.bash_aliases"
   alias bashrcedit="vim ~/.bashrc"
@@ -27,9 +43,9 @@ function bashAliases() {
   alias psmy="ps -fjH -u $USER"
   alias got="ps -aux | grep "
   alias chx="chmod +x"
+  # hide/show gnome terminal tabs
   alias hidetabs="gsettings set org.gnome.Terminal.Legacy.Settings tab-policy 'never'"
   alias showtabs="gsettings set org.gnome.Terminal.Legacy.Settings tab-policy 'always'"
-  alias cppath="pwd | xsel -b"
   #------------@apt------------------------
   alias api="sudo apt install "
   alias aps="sudo apt search "
@@ -43,13 +59,13 @@ function bashAliases() {
   alias susstop="sudo systemctl stop"
   alias susstart="sudo systemctl start"
   alias susstatus="sudo systemctl status"
-  alias whatismyip="curl https://checkip.amazonaws.com/"
+  #alias whatismyip="curl https://checkip.amazonaws.com/"
+  alias whatismyip="dig +short myip.opendns.com @resolver1.opendns.com"
   alias pingg="ping google.com"
   alias taillog="tail -f /var/log/syslog"
 }
 
 function laravelAliases() {
-  alias pac="php artisan cache:clear && php artisan config:clear && php artisan route:clear && php artisan view:clear &&  php artisan config:cache"
   alias par="php artisan "
   alias pars="php artisan serve"
   alias parm="php artisan migrate"
@@ -60,26 +76,23 @@ function laravelAliases() {
   alias parmt="php artisan make:test "
   alias parmc="php artisan make:controller"
   alias pat="php artisan tinker"
-  alias labreeze="composer require laravel/breeze --dev && php artisan breeze:install && npm install && npm run dev && php artisan migrate"
   alias pasanctum="composer require laravel/sanctum && php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider" && php artisan migrate"
 }
 
 function composerAliases () {
     alias cor="composer require "
-    alias cola="composer create-project laravel/laravel "
+    alias cola="composer create-project laravel/laravel"
     alias coda="composer dump-autoload"
-    alias coinit='[[ ! -f composer.json ]] && echo " composer.init
-{
-    "name": "beekalam/php-demo",
-    "authors": [
+    alias coinit='[[ ! -f composer.json ]] && echo "{
+    \"name\": \"beekalam/php-demo\",
+    \"authors\": [
         {
-            "name": "Mohammad Reza mansouri",
-            "email": "beekalam@gmail.com"
+            \"name\": \"Mohammad Reza mansouri\",
+            \"email\": \"beekalam@gmail.com\"
         }
     ],
-    "require": {}
-}" > composer.json && echo "created composer.json"
-'
+    \"require\": {}
+}" > composer.json && echo "created composer.json" '
 }
 
 function npmAliases () {
@@ -110,12 +123,15 @@ function dockerAliases () {
     alias dkrit='docker run --rm -it '
     alias dkritc='docker run --rm -it -v $PWD:/cwd -w /cwd '
     alias dk_pg_playground='docker run --rm --name pg13 -e POSTGRES_PASSWORD=123 -d postgres:13.4 && docker exec -it pg13 bash --login'
+    alias dk_mongo_playground='docker run -d --rm --name some-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=password mongo:latest'
+    alias dk_mongo_shell='docker container exec -it some-mongo bash'
     #-- @docker-compose
     alias dc='docker-compose'
     alias dcu='docker-compose up '
     alias dcd='docker-compose down '
     alias dcr='docker-compose run '
     alias dcrr='docker-compose run --rm   '
+    alias dcl='docker-compose logs '
 }
 
 function goAliases () {
@@ -127,6 +143,7 @@ function phpAliases () {
     alias setphp72="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-7.2 lampp"
     alias setphp74="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-7.4 lampp"
     alias setphp8="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-8 lampp"
+    alias php_playground="php -S localhost:9090 -t /home/moh/code/php/php-console"
 }
 function gitAliases () {
     alias gitinit='git init && git add . && git commit -m "initial commit" && git log'
@@ -142,19 +159,15 @@ function protovpnAliases () {
     alias pro.reset="prod && proc.nl && whatismyip"
 }
 
-alias notes="/home/moh/src/python/znotes/venv/bin/python /home/moh/src/python/znotes/Notes.py"
-alias cdd="cd /run/user/1000/gvfs/smb-share:server=192.168.1.110,share=d,user=moh"
-alias cde="cd /run/user/1000/gvfs/smb-share:server=192.168.1.110,share=e,user=moh"
-alias emacsnw="emacs -nw"
+function pythonAliases () {
+    #----------@python,virtualenv--------
+    alias activate="source venv/bin/activate"
+}
 #-----------------------------------
-#----------@python,virtualenv--------
-alias activate="source venv/bin/activate"
-alias xampp="sudo /opt/lampp/xampp"
 alias xampp.manager="sudo /opt/lampp/manager-linux-x64.run"
 alias cleanservices="sudo service anydesk stop && \
                                   sudo service snapd stop && \
 				  sudo service libvirtd stop"
-alias cdsrc="cd /media/moh/11D3A2BE6C7F0676/src"
 alias secondmonitoronly="xrandr --output VGA-0  --auto --output LVDS-0 --off"
 alias firstmonitoronly="xrandr --output LVDS-0  --auto --output VGA-0 --off"
 # clean up evolution services that is not needed in i3wm
@@ -167,20 +180,14 @@ alias import_chrome_bookmarks_to_qutebrowser="python3.8 /usr/share/qutebrowser/s
 
 # alias myi3init="secondmonitoronly && evoclean && setkeyboardlayouts && cleanservices && xmodmap ~/.xmodmaprc && killminerfs && xset r rate 190 40"
 # copy current path to clipboard
-alias coderenice='for pi in `pgrep "code"`; do sudo renice -n -20 $pi; done'
-# ---------- @emacs-------------
-alias emacsrenice='for pi in `pgrep "emacs"`; do sudo renice -n -20 $pi; done'
 
-alias grepi="grep -i"
 alias mongostart="sudo systemctl start mongod.service"
 alias mongodstop="sudo systemctl stop mongod.service"
 
-#-- @pdfsam
-alias pdfsam='nohup java -jar /mnt/11D3A2BE6C7F0676/opt/pdfsam-4.2.12-linux/pdfsam-basic-4.2.12.jar >/dev/null 2>&1 &'
 
-
-alias vmtouch_vscode='vmtouch -vt /usr/share/code'
-alias vmtouch_emacs='vmtouch -vt /usr/local/bin/emacs && vmtouch -vt ~/.emacs.d/layers/ vmtouch -vt ~/.emacs.d/eln-cache'
+function kubernetesAliases() {
+    alias kgp="kubectl get pods"
+}
 
 bashAliases
 laravelAliases
@@ -190,3 +197,33 @@ goAliases
 dockerAliases
 phpAliases
 gitAliases
+
+
+qcd () {
+    # Accept 1 argument that's a string key, and perform a different
+    # "cd" operation for each key.
+    case "$1" in
+        downloads)
+            cd $HOME/Downloads
+            ;;
+        mounts)
+            cd /mnt/11D3A2BE6C7F0676/
+            ;;
+        notes)
+            cd /mnt/11D3A2BE6C7F0676/notes/zettle_notes
+            ;;
+        code)
+            cd $HOME/code
+            ;;
+        *)
+            # The supplied argument was not one of the supported keys
+            echo "qcd: unknown key '$1'"
+            return 1
+            ;;
+    esac
+    # Helpfully print the current directory name to indicate where you are
+    pwd
+}
+# Set up tab completion
+complete -W "downloads mounts notes code" qcd
+

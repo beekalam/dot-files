@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+loop=""
+duration="5m"
+message="time's up"
+
+while getopts 'ld:m:h' OPTION
+do
+    case $OPTION in
+	l) loop=1
+	    ;;
+	d) duration="$OPTARG"
+	    ;;
+	m) message="$OPTARG"
+	    ;;
+	h) printf "usage: %s [-d duration] [-l loop-timer] [-m 'message' ] args\n" ${0##*/} >&2
+	    exit 2
+	    ;;
+    esac
+done
+shift $((OPTIND - 1))
+
+if [ -n "$loop" ]
+then
+    while true
+    do
+	sleep "$duration"
+	notify-send -u normal -i /usr/share/icons/Paper/64x64/apps/email.png "$message" && paplay /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
+	echo `date +"%Y-%m-%d %H:%M:%S"` " $message"
+    done
+else
+    printf "We'll notify you in: $duration\n"
+    sleep "$duration"
+    notify-send -u normal -i /usr/share/icons/Paper/64x64/apps/email.png "$message" && paplay /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
+    echo "Bye."
+fi
+
+

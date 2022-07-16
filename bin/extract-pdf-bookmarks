@@ -1,0 +1,102 @@
+#!/usr/bin/env php
+<?php
+
+/*
+  extracts pdf bookmarks to Obsidian links.
+*/
+
+
+function usage(){
+    echo "script <pdf-path> <media-dir>\n";
+    echo "Geenerates a links like this:\n";
+    echo "- [[ <media-path>/<pdf-filename>#page=<bookmark_pageNumber> | <bookmarktitle> ]]\n";
+    echo "                             \n";
+}
+
+
+function is_executable_pathenv(string $filename): bool
+{
+    if (is_executable($filename)) {
+        return true;
+    }
+    if ($filename !== basename($filename)) {
+        return false;
+    }
+    $paths = explode(PATH_SEPARATOR, getenv("PATH"));
+    foreach ($paths as $path) {
+        if (is_executable($path . DIRECTORY_SEPARATOR . $filename)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+function tap($arg, $callable){
+    return $callable($arg);
+}
+
+function tabs($level){
+    $tabs = "";
+    if($level > 1){
+        $tabs = str_repeat("\t",$level-1);
+    }
+    return $tabs;
+}
+
+function formatHeading($tabs,$pageNumber, $title){
+    global $mediaDir;
+    global $pdfFileName;
+    return tap("\n%s- [[%s/%s#page=%s | %s]]", fn($format) => sprintf($format,$tabs,$mediaDir,$pdfFileName, $pageNumber,$title));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+if(!is_executable_pathenv("pdftk")){
+    trigger_error("pdftk not found or is not executable");
+    exit;
+}
+
+
+if(count($argv) < 3){
+    usage();
+    die("wrong number of arguments\n");
+}
+
+$pdf = $argv[1];
+$mediaDir = $argv[2];
+$pdfFileName= basename($pdf);
+
+if (!is_file($pdf)){
+    die("pdf file does not exist.");
+}
+
+$output =  shell_exec("pdftk $pdf dump_data | grep Bookmark");
+$bookmarks = explode("\n", $output);
+$bookmarks_array = [];
+
+$tmp = [];
+$res = "";
+
+foreach($bookmarks as $bk){
+    if($bk == "BookmarkBegin"){
+        if(count($tmp) == 3){
+                $res .= formatHeading(tabs($tmp["BookmarkLevel"]), $tmp["BookmarkPageNumber"], $tmp["BookmarkTitle"]);
+        }
+        $tmp = [];
+    }else{
+        if(str_contains($bk,":")){
+            $parts = explode(":",$bk);
+            $k = $parts[0];
+            $v = trim(implode("", array_slice($parts, 1)));
+
+            $v = html_entity_decode(trim($v));
+            $v = str_replace(
+                ["&apos;"],
+                ["'"],
+                $v
+            );
+            $tmp[$k] = $v;
+        }
+    }
+}
+print $res . PHP_EOL;

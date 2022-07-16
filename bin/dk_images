@@ -1,0 +1,48 @@
+#!/bin/bash
+
+function print_images () {
+    docker image ls | { sed -u 's/^/        /;q';  nl;}
+}
+
+function images_without_header () {
+    print_images | sed '1d'
+}
+
+function delete_image () {
+    id="$1"
+    oifs=$IFS
+    IFS=$'\n'
+    images=()
+    for line in  `images_without_header | awk '{print $1,$4}'`
+    do
+        key=$(echo $line | awk '{print $1}')
+        value=$(echo $line | awk '{print $2}')
+        images["$key"]="$value"
+    done
+    IFS=$oifs
+    docker image rm -f "${images[$id]}"
+}
+
+function show_menu () {
+    echo -n "which image to delete?: (q to quit)"
+    read selection
+    if [ $selection = "q" ]
+    then
+        exit 0
+    elif [[ `isint "$selection"` -eq 0 ]]
+    then
+        delete_image "$selection"
+    fi
+}
+
+isint() {
+    local chk=${1#[+-]}
+    [ "$chk" ] && [ -z "${chk//[0-9]}" ]
+}
+
+
+while true
+do
+    print_images
+    show_menu
+done
