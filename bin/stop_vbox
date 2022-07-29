@@ -1,3 +1,0 @@
-#!/bin/bash
-sudo service virtualbox stop
-sudo service virtualbox-guest-utils stop

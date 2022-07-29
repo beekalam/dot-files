@@ -1,4 +1,0 @@
-#!/bin/bash
-sudo service vmware stop
-sudo service vmware-USBArbitrator stop
-sudo service vmware-workstation-server stop

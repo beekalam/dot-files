@@ -1,4 +1,0 @@
-#!/bin/bash
-sudo service vmware start
-sudo service vmware-USBArbitrator start
-sudo service vmware-workstation-server start
