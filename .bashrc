@@ -15,7 +15,7 @@ export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/opt/zig-linux-x86_64-0.9.1
 export PATH=$PATH:/opt/zls
 
-. ~/.do-files/z/z.sh
+. ~/.dot-files/z/z.sh
 
 # Allow Composer to use almost as much RAM as Chrome.
 # export COMPOSER_MEMORY_LIMIT=-1
