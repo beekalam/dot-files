@@ -1,3 +1,0 @@
-#!/bin/bash
-# Copies the contents of the /var/cache/apt to /home/moh/ubuntu16-packages
-cp --no-clobber /var/cache/apt/archives/* /home/moh/ubuntu16-packages

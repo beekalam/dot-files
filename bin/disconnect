@@ -1,2 +1,0 @@
-#!/bin/bash
-nmcli - con down id "DSL connection 1"
