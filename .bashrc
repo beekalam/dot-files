@@ -4,8 +4,12 @@ PATH=$PATH:~/.dot-files/bin/
 
 . ~/.dot-files/z/z.sh
 
-# lampp server shortcuts
-PATH=$PATH:/opt/lampp/bin
+# if lampp server is installed add it to path
+if [[ -d '/opt/lampp/bin' ]]
+then
+    PATH=$PATH:/opt/lampp/bin
+fi
+
 # pip3 virtualenv
 PATH=$PATH:~/.local/bin
 
@@ -26,7 +30,7 @@ export PATH=$PATH:/opt/zls
 # export COMPOSER_MEMORY_LIMIT=-1
 source ${BASEDIR}/.bash_utils.sh
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
-# @variables
+
 # define preferred tools
 export EDITOR=vim
 export PAGER=less
@@ -40,8 +44,7 @@ export LESS_TERMCAP_so=$'\E[01;44;33m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[01;32m'
 
-# =================================================
-
+# bash aliases
 if [ -f ~/.dot-files/.bash_aliases ]; then
     . ~/.dot-files/.bash_aliases
 fi
