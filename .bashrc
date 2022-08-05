@@ -1,21 +1,26 @@
 BASEDIR="$(dirname $(readlink -f ${BASH_SOURCE[0]}))"
 
+PATH=$PATH:~/.dot-files/bin/
+
+. ~/.dot-files/z/z.sh
+
 # lampp server shortcuts
 PATH=$PATH:/opt/lampp/bin
-PATH=$PATH:/usr/local/go/bin
 # pip3 virtualenv
 PATH=$PATH:~/.local/bin
 
-PATH=$PATH:~/.dot-files/bin/
-# go
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
+
+# init go path if it is installed
+if [[ -d '/usr/local/go' ]]
+then
+    PATH=$PATH:/usr/local/go/bin
+    export GOPATH=$HOME/go
+    export PATH=$PATH:$GOPATH/bin
+fi
 
 #zig
 export PATH=$PATH:/opt/zig-linux-x86_64-0.9.1
 export PATH=$PATH:/opt/zls
-
-. ~/.dot-files/z/z.sh
 
 # Allow Composer to use almost as much RAM as Chrome.
 # export COMPOSER_MEMORY_LIMIT=-1
