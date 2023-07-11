@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+args="'${@}'"
+res=`python -c "print('locate / | grep -i ' + ' | grep -i '.join(${args}.strip().split(' ')))"`
+sh -c "$res"

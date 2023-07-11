@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+
+# run command with proxy
+# example:
+# withproxy curl checkip.amazonaws.com
+
+export http_proxy="http://localhost:8118"
+export https_proxy="http://localhost:8118"
+$@

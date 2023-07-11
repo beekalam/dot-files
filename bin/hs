@@ -1,0 +1,14 @@
+#!/usr/bin/env bb
+
+(defn all-words-in-string? [words string]
+  (every? #(re-find (re-pattern %) string) words))
+
+(defn nl [input]
+  (map #(str % " " (nth input %))
+       (range 1 (count input))))
+
+(let [words *command-line-args*
+      p     "/home/moh/.bash_history"
+      lines (str/split-lines (slurp p))]
+  (clojure.pprint/pprint
+    (filter #(all-words-in-string? words %) lines)))

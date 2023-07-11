@@ -1,0 +1,27 @@
+#!/usr/bin/env bb
+(require '[clojure.string])
+
+(defn is-root []
+  (let [id-out (:out (babashka.process/sh "id" "-u"))
+        id     (clojure.string/replace id-out "\n" "")]
+    (= id "0")))
+
+
+(defn toggle-shecan-dns [resolve_path]
+  (let [content           (slurp resolve_path)
+        default_namespace "nameserver 127.0.0.53"
+        shecan_ns         ["nameserver 178.22.122.100"
+                           "nameserver 185.51.200.2"
+                           ""]
+        shecan            (clojure.string/join "\n" shecan_ns)]
+    (if (clojure.string/includes? content default_namespace)
+      (spit resolve_path shecan)
+      (spit resolve_path default_namespace))))
+
+(when (not (is-root))
+  (println "Run as root")
+  (System/exit 1))
+
+(toggle-shecan-dns "/etc/resolv.conf")
+
+(println (slurp "/etc/resolv.conf"))

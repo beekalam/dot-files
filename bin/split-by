@@ -1,0 +1,6 @@
+#! /usr/bin/env bb
+
+;; (def lines (str/split (read-line) #"\n"))
+(def lines (str/split (read-line) #"\n"))
+;; (println lines)
+(map println lines)

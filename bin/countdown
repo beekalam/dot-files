@@ -1,0 +1,24 @@
+#!/bin/bash
+# run the following command with a dramatic countdown.
+
+# eventually use $1 as argument for the countdown
+drama_seconds=3
+if [[ $1 =~ [0-9] ]]
+then
+    drama_seconds=$1
+    # After using the first argument we want throw it away so it isn't
+    # in $@ anymore.
+    shift
+fi
+
+# run countdown
+(>&2 echo "Will run $@ in $drama_seconds seconds.")
+for n in $(seq "$drama_seconds" "-1" "1")
+do
+    (>&2 echo "$n")
+    sleep 1
+done
+echo "Now!"
+
+# Run the following command, eventually with stdin
+$@<&0

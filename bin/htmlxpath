@@ -1,0 +1,6 @@
+#! /bin/bash
+function htmlxpath() {
+    python3 -c 'for x in __import__("lxml.html").html.fromstring(__import__("sys").stdin.read()).xpath(__import__("sys").argv[1]): print(x)' $1
+}
+
+htmlxpath $*

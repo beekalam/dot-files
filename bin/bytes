@@ -1,0 +1,13 @@
+#! /usr/bin/env bb
+
+
+(let [[bytes] *command-line-args*]
+ (when (or (empty? bytes))
+ 	(println "usage: bytes <number_of_bytes>")
+ 	(System/exit 1))
+
+ (let [ibytes (BigInteger. bytes)]
+		(println ibytes "		B")
+ 	(println (float (/ ibytes 1024)) "		KB")
+ 	(println (float (/ ibytes 1024 1024)) " 	MB")
+ 	(println (float (/ ibytes 1024 1024 1024)) " 	GB")))

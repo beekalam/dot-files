@@ -1,0 +1,44 @@
+#! /usr/bin/env bb
+
+(defn text-block [ & strings ] (str/join "\n" strings))
+
+(defn ensure-file [path]
+	(.exists (clojure.java.io/file path)) )
+
+(defn ask-for [title]
+  (print title)
+  (flush)
+  (read-line))
+
+
+(def template (text-block
+"[Desktop Entry]"
+"Name=%s"
+"Icon="
+"Comment=%s"
+"Exec=\"%s\""
+"Version=1.0"
+"Type=Application"
+"Categories=%s"
+"Terminal=false"
+"StartupNotify=true"
+"Icon=%s"))
+
+(def name (ask-for "name:"))
+(def comment (ask-for "comment: "))
+(def exec-path (ask-for "executable path: "))
+(def categories (ask-for "categories: "))
+(def icon (ask-for "icon path: "))
+
+(def parsed-template (format template name comment exec-path categories icon))
+(def msg (text-block parsed-template "is the above input correct? "))
+(def dest (str (System/getenv "HOME") "/.local/share/applications/" name ".desktop"))
+
+(println "==================")
+(print msg)
+(flush)
+
+(when (and
+        (= "y" (read-line))
+        (not (ensure-file dest)))
+  (spit dest parsed-template))

@@ -1,0 +1,14 @@
+#!/usr/bin/env bb
+(require '[babashka.curl :as curl])
+
+(let [[n] *command-line-args*]
+  (when (or (empty? n) (empty? n))
+    (println "take: <number of lines>")
+    (System/exit 1))
+
+  (doseq [_ (range 1 (inc (Integer/parseInt n)))]
+    (println (read-line))
+    ))
+
+
+

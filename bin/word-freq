@@ -1,0 +1,29 @@
+#!/usr/bin/env bb
+
+(let [[file] *command-line-args*]
+  (when (empty? file)
+  (println "usage: <file-path>")
+  (System/exit 1)))
+
+(defn word-freq [string]
+  (let [s (str/split-lines string)
+        words (str/join " " s)
+        words (str/split words #"\s+")
+        words (frequencies (seq words))
+        words (sort-by val > words) ]
+        words))
+
+(def file-path (let [[file] *command-line-args*]
+            file))
+
+(def sf (slurp file-path :encoding "UTF-8"))
+(def sf (str/replace sf #"\d{1,2}:\d{1,2}:\d{1,2}" ""))
+(def sf (str/replace sf #"," ""))
+(def sf (str/replace sf #"\." ""))
+(def sf (str/replace sf #"\d+" ""))
+(def sf (clojure.string/replace sf #"<font.*>(.*)</font>" "$1"))
+
+
+(doseq [w (word-freq sf) ]
+  (println w))
+
