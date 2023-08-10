@@ -213,6 +213,30 @@ Version 2018-03-02"
       (replace-string "&gt;" ">")
       (goto-char (point-min)))))
 
+(defun strip-html-from-srt-file()
+  "Removes font tags  and time lines and empty lines from srt file"
+  (interactive "*")
+  (save-excursion
+    (save-excursion
+      (widen)
+      (goto-char (point-min))
+      (while (re-search-forward "^[0-9]*:[0-9]*.*-->.*" (point-max) t)
+        (replace-match " "))
+
+      (goto-char (point-min))
+      (while (re-search-forward "^[0-9]*$" (point-max) t)
+        (replace-match " "))
+
+      (goto-char (point-min))
+      (while (re-search-forward "<[^<]*>" (point-max) t)
+        (replace-match "\\1"))
+      (goto-char (point-min))
+      (my-delete-blank-lines))))
+
+(defun my-delete-blank-lines ()
+  (interactive)
+  (flush-lines "^[[:space:]]*$" (point-min) (point-max)))
+
 
 (defun xah-escape-quotes (@begin @end)
   "Replace 「\"」 by 「\\\"」 in current line or text selection.
@@ -399,5 +423,76 @@ Version 2017-01-11"
     )
   )
 
+(defun lookup-in-linguee()
+  (interactive)
+  (setq linguee-url (format "https://www.linguee.com/english-german/search?source=german&query=%s" (current-word)))
+  (browse-url--browser linguee-url))
+
+(defun strip-srt-file ()
+  (interactive)
+  (save-excursion
+    (save-restriction
+      (widen)
+      (goto-char (point-min))
+      (while (re-search-forward "^[0-9]+$" (point-max) t)
+        (replace-match "\\1"))
+      ))
+  (save-excursion
+    (save-restriction
+      (widen)
+      (goto-char (point-min))
+      (while (re-search-forward "^.* -->.*$" (point-max) t)
+        (replace-match "\\1"))
+      ))
+  (xah-clean-empty-lines))
+
+(defun strip-word (word)
+  (save-excursion
+    (save-restriction
+      (widen)
+      (goto-char (point-min))
+      (while (re-search-forward (format " %s " word) (point-max) t)
+        (replace-match " "))
+      (goto-char (point-min))
+      (while (re-search-forward (format "%s " word) (point-max) t)
+        (replace-match " "))
+
+      ;; (goto-char (point-min))
+      ;; (while (re-search-forward (format "%s, " word) (point-max) t)
+      ;;   (replace-match " "))
+
+      ;; (goto-char (point-min))
+      ;; (while (re-search-forward (format "%s\\\\? " word) (point-max) t)
+      ;;   (replace-match " "))
+
+      ;; (goto-char (point-min))
+      ;; (while (re-search-forward (format "%s\\\\." word) (point-max) t)
+      ;;   (replace-match " "))
+      )))
+
+(defun strip-stop-words ()
+  (interactive)
+  (setq stop-words (list
+                    "die" "der" "das"
+                    "was" "was?" "Was?" "wie" "wie?" "Wie?" "wo" "wo?" "Wo?"
+                    "wer" "wer?" "Wer?" "wann" "wann?" "Wann?" "sein" "dein" "du" "er" "Sie"
+                    "warum?" "Warum?"
+                    "Nein," "Nein" "nein" "den" "richtigen" "richtige" "richtiges"
+                    "Es"
+                    "ihr" "ihn" "ihnen" "sir" "Herr" "herr" "ok" "schon" "tut" "leid" "und?" "und"
+                    "Als" "als" "weil" "willst" "hin" "mich" "an" "nicht"
+                    "jede" "jeder" "jedes" "war" "alle" "welt" "Tor" "tor"
+                    "jetzt" "ihm" "verdammt" "verdammt" "bitte" "Bitte" "dass" "er" "Ich" "muss" "ih"
+                    "aus" "aber" "Aber" "Mehr" "mehr" "Zeit" "nicts" "Es" "es" "wo" "bist"
+                    "sind" "seid" "Nein" "ja" "Das" "das" "ist" "all" "alles" "Gib" "mir" "etwas"
+                    "Im" "im" "mit" "arschloch" "bei" "gab" "nur" "so" "viel" "verdammt" "hast" "also"
+                    "nehme" "bis" "dann" "alles" "Alles" "Hast" "hast" "da" "machst" "machen"
+                    "uns" "rein" "nach" "Nach" "Ich" "gut" "gut." "So" "so" "Du" "etwas" "etwas."
+                    "weil" "Weil" ",weil" "weil," "ein" "eine" "eines" "einem" "einer"
+                    "jeder" "Lasst" "uns" "raus" "raus," "verdammt!" "euch" "danke." "danke"
+                    "Danke." "Danke" "Hey," "hey," "hey" "ok." "ok" "zu" "zur"
+                     "warum" "Warum" "wir" "du?" "alle." "alle"
+                    ))
+  (mapcar #'strip-word stop-words))
 
 (provide 'util-funcs)

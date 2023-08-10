@@ -100,12 +100,12 @@
 
 
 
-;; (popup-menu* '("Foo" "Bar" "Baz")
-;;              :point (window-start)
-;;              :isearch t
-;;              ;; :isearch (lambda()
-;;              ;;            (message "in isearch"))
-;;              )
+;;(popup-menu* '("Foo" "Bar" "Baz")
+;;             :point (window-start)
+;;             :isearch t
+;;            :isearch (lambda()
+;;                        (message "in isearch"))
+;;             )
 
 
 ;; (got-char (window-start))
@@ -134,7 +134,7 @@
     (setq selected
           (popup-menu* popup-list
                        :width 70
-                       :point (window-start)
+                       ;; :point (window-start)
                        :isearch t
                        :scroll-bar t))
 
@@ -153,15 +153,20 @@
                  (lambda (item)
                    (make-popup-item (buffer-name item) (buffer-name item)))
                  (buffer-list)))
+  ;; (message (s-join  "," buffers))
   (setq selected
         (popup-menu* buffers
                      :width 70
                      :point (window-start)
                      :isearch t
                      :scroll-bar t))
-  (when selected
-    (progn
-      (switch-to-buffer selected))))
+  (message selected)
+  ;; (when selected
+    ;; (progn
+    ;;   (switch-to-buffer selected))
+    ;; )
+  )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (let* ((alist '(("GNU" . "GNU is not Unix")
 ;;                 ("Emacs" . "Eight Megabytes And Constantly Swapping")))
@@ -489,10 +494,306 @@
     (term "/bin/bash")
     ))
 
+(defun xah-show-in-desktop ()
+  "Show current file in desktop.
+ (Mac Finder, File Explorer, Linux file manager)
+This command can be called when in a file buffer or in `dired'.
+URL `http://xahlee.info/emacs/emacs/emacs_dired_open_file_in_ext_apps.html'
+Version: 2020-11-20 2022-04-20 2022-08-19"
+  (interactive)
+  (let (($path (if (eq major-mode 'dired-mode)
+                   (if (eq nil (dired-get-marked-files))
+                       default-directory
+                     (car (dired-get-marked-files)))
+                 (if buffer-file-name buffer-file-name default-directory))))
+    (cond
+     ((string-equal system-type "windows-nt")
+      (shell-command (format "PowerShell -Command invoke-item '%s'" (expand-file-name default-directory )))
+      ;; (let (($cmd (format "Explorer /select,%s"
+      ;;                     (replace-regexp-in-string "/" "\\" $path t t)
+      ;;                     ;; (shell-quote-argument (replace-regexp-in-string "/" "\\" $path t t ))
+      ;;                     )))
+      ;;   (shell-command $cmd))
+      )
+     ((string-equal system-type "darwin")
+      (shell-command
+       (concat "open -R " (shell-quote-argument $path))))
+     ((string-equal system-type "gnu/linux")
+      (call-process shell-file-name nil nil nil
+                    shell-command-switch
+                    (format "%s %s"
+                            "xdg-open"
+                            (file-name-directory $path)))
+      ;; (shell-command "xdg-open .") ;; 2013-02-10 this sometimes froze emacs till the folder is closed. eg with nautilus
+      ))))
 
 ;; (defun run-go-script ()
 ;;   "opens a gnome-terminal"
 ;;   (interactive "@")
 ;;   (shell-command (concat "/bin/bash -c 'sleep 3' & disown ")))
 
+(defun xah-open-in-vscode ()
+  "Open current file or dir in vscode.
+URL `http://xahlee.info/emacs/emacs/emacs_dired_open_file_in_ext_apps.html'
+Version: 2020-02-13 2021-01-18 2022-08-04"
+  (interactive)
+  (let (($path (if buffer-file-name buffer-file-name (expand-file-name default-directory))))
+    (message "path is %s" $path)
+    (cond
+     ((string-equal system-type "darwin")
+      (shell-command (format "open -a Visual\\ Studio\\ Code.app %s" (shell-quote-argument $path))))
+     ((string-equal system-type "windows-nt")
+      (shell-command (format "code.cmd %s" (shell-quote-argument $path))))
+     ((string-equal system-type "gnu/linux")
+      (shell-command (format "code %s" (shell-quote-argument $path)))))))
+
+(defun xah-clean-empty-lines ()
+  "Replace repeated blank lines to just 1, in whole buffer or selection.
+Respects `narrow-to-region'.
+URL `http://xahlee.info/emacs/emacs/elisp_compact_empty_lines.html'
+Version: 2017-09-22 2020-09-08"
+  (interactive)
+  (let ($begin $end)
+    (if (region-active-p)
+        (setq $begin (region-beginning) $end (region-end))
+      (setq $begin (point-min) $end (point-max)))
+    (save-excursion
+      (save-restriction
+        (narrow-to-region $begin $end)
+        (progn
+          (goto-char (point-min))
+          (while (re-search-forward "\n\n\n+" nil 1)
+            (replace-match "\n\n")))))))
+
+(defun xah-new-empty-buffer ()
+  "Create a new empty buffer.
+New buffer is named untitled, untitled<2>, etc.
+On emacs quit, if you want emacs to prompt for save, set `buffer-offer-save' to t.
+It returns the buffer.
+URL `http://xahlee.info/emacs/emacs/emacs_new_empty_buffer.html'
+Version: 2017-11-01 2022-04-05"
+  (interactive)
+  (let (($buf (generate-new-buffer "untitled")))
+    (switch-to-buffer $buf)
+    (funcall initial-major-mode)
+    $buf
+    ))
+
+(defun xah-next-emacs-buffer ()
+  "Switch to the next emacs buffer.
+“emacs buffer” here is buffer whose name starts with *.
+URL `http://xahlee.info/emacs/emacs/elisp_next_prev_user_buffer.html'
+Version: 2016-06-19"
+  (interactive)
+  (next-buffer)
+  (let ((i 0))
+    (while (and (not (string-equal "*" (substring (buffer-name) 0 1))) (< i 20))
+      (setq i (1+ i)) (next-buffer))))
+
+(defun xah-previous-emacs-buffer ()
+  "Switch to the previous emacs buffer.
+“emacs buffer” here is buffer whose name starts with *.
+URL `http://xahlee.info/emacs/emacs/elisp_next_prev_user_buffer.html'
+Version: 2016-06-19"
+  (interactive)
+  (previous-buffer)
+  (let ((i 0))
+    (while (and (not (string-equal "*" (substring (buffer-name) 0 1))) (< i 20))
+      (setq i (1+ i)) (previous-buffer))))
+
+(defun xah-copy-file-path (&optional DirPathOnlyQ)
+  "Copy current buffer file path or dired path.
+Result is full path.
+If `universal-argument' is called first, copy only the dir path.
+If in dired, copy the current or marked files.
+If a buffer is not file and not dired, copy value of `default-directory'.
+URL `http://xahlee.info/emacs/emacs/emacs_copy_file_path.html'
+Version: 2018-06-18 2021-09-30"
+  (interactive "P")
+  (let (($fpath
+         (if (string-equal major-mode 'dired-mode)
+             (progn
+               (let (($result (mapconcat #'identity
+                                         (dired-get-marked-files) "\n")))
+                 (if (equal (length $result) 0)
+                     (progn default-directory )
+                   (progn $result))))
+           (if buffer-file-name
+               buffer-file-name
+             (expand-file-name default-directory)))))
+    (kill-new
+     (if DirPathOnlyQ
+         (progn
+           (message "Directory copied: %s" (file-name-directory $fpath))
+           (file-name-directory $fpath))
+       (progn
+         (message "File path copied: %s" $fpath)
+         $fpath )))))
+
+(defun list-buffer-right ()
+  (interactive)
+  (if (window-full-width-p)
+      (progn
+        (split-window-right)
+        (other-window 1)
+        (ibuffer)
+        )
+    (progn
+      (other-window 1)
+      (ibuffer)
+      )))
+
+(defun beekalam-current-buffer-directory ()
+  ;; open a server on current buffer directory
+  (interactive)
+  (when-let (bf (buffer-file-name))
+    (file-name-directory bf)))
+
+(defun xah-select-line ()
+  "Select current line. If region is active, extend selection downward by line.
+If `visual-line-mode' is on, consider line as visual line.
+
+URL `http://xahlee.info/emacs/emacs/modernization_mark-word.html'
+Version: 2017-11-01 2021-03-19 2023-07-16"
+  (interactive)
+  (if (region-active-p)
+      (if visual-line-mode
+          (let ((xp1 (point)))
+            (end-of-visual-line 1)
+            (when (eq xp1 (point))
+              (end-of-visual-line 2)))
+        (progn
+          (forward-line 1)
+          (end-of-line)))
+    (if visual-line-mode
+        (progn (beginning-of-visual-line)
+               (push-mark (point) t t)
+               (end-of-visual-line))
+      (progn
+        (push-mark (line-beginning-position) t t)
+        (end-of-line)))))
+
+(defun xah-select-block ()
+  "Select the current/next block plus 1 blankline.
+If region is active, extend selection downward by block.
+
+URL `http://xahlee.info/emacs/emacs/modernization_mark-word.html'
+Version: 2019-12-26 2021-04-04 2021-08-13"
+  (interactive)
+  (if (region-active-p)
+      (re-search-forward "\n[ \t]*\n[ \t]*\n*" nil 1)
+    (progn
+      (skip-chars-forward " \n\t")
+      (when (re-search-backward "\n[ \t]*\n" nil 1)
+        (goto-char (match-end 0)))
+      (push-mark (point) t t)
+      (re-search-forward "\n[ \t]*\n" nil 1))))
+
+(defun xah-extend-selection ()
+  "Select the current word, bracket/quote expression, or expand selection.
+Subsequent calls expands the selection.
+
+when there is no selection,
+• If cursor is on any type of bracket (including parenthesis, quotation mark), select whole bracketed thing including bracket
+• else, select current word.
+
+when there is a selection, the selection extension behavior is still experimental. But when cursor is on a any type of bracket (parenthesis, quote), it extends selection to outer bracket.
+
+URL `http://xahlee.info/emacs/emacs/modernization_mark-word.html'
+Version: 2020-02-04 2023-07-22 2023-07-23"
+  (interactive)
+  (if (region-active-p)
+      (progn
+        (let ((xrb (region-beginning)) (xre (region-end)))
+          (goto-char xrb)
+          (cond
+           ((looking-at "\\s(")
+            (if (eq (nth 0 (syntax-ppss)) 0)
+                (progn
+                  ;; (message "left bracket, depth 0.")
+                  (end-of-line) ; select current line
+                  (push-mark (line-beginning-position) t t))
+              (progn
+                ;; (message "left bracket, depth not 0")
+                (up-list -1 t t)
+                (mark-sexp))))
+           ((eq xrb (line-beginning-position))
+            (progn
+              (goto-char xrb)
+              (let ((xfirstLineEndPos (line-end-position)))
+                (cond
+                 ((eq xre xfirstLineEndPos)
+                  (progn
+                    ;; (message "exactly 1 line. extend to next whole line." )
+                    (forward-line 1)
+                    (end-of-line)))
+                 ((< xre xfirstLineEndPos)
+                  (progn
+                    ;; (message "less than 1 line. complete the line." )
+                    (end-of-line)))
+                 ((> xre xfirstLineEndPos)
+                  (progn
+                    ;; (message "beginning of line, but end is greater than 1st end of line" )
+                    (goto-char xre)
+                    (if (eq (point) (line-end-position))
+                        (progn
+                          ;; (message "exactly multiple lines" )
+                          (forward-line 1)
+                          (end-of-line))
+                      (progn
+                        ;; (message "multiple lines but end is not eol. make it so" )
+                        (goto-char xre)
+                        (end-of-line)))))
+                 (t (error "%s: logic error 42946" real-this-command))))))
+           ((and (> (point) (line-beginning-position)) (<= (point) (line-end-position)))
+            (progn
+              ;; (message "less than 1 line" )
+              (end-of-line) ; select current line
+              (push-mark (line-beginning-position) t t)))
+           (t
+            ;; (message "last resort" )
+            nil))))
+    (progn
+      (cond
+       ((looking-at "\\s(")
+        ;; (message "left bracket")
+        (mark-sexp)) ; left bracket
+       ((looking-at "\\s)")
+        ;; (message "right bracket")
+        (backward-up-list) (mark-sexp))
+       ((looking-at "\\s\"")
+        ;; (message "string quote")
+        (mark-sexp)) ; string quote
+       ;; ((and (eq (point) (line-beginning-position)) (not (looking-at "\n")))
+       ;;  (message "beginning of line and not empty")
+       ;;  (end-of-line)
+       ;;  (push-mark (line-beginning-position) t t))
+       (
+        ;; (prog2 (backward-char) (looking-at "[-_a-zA-Z0-9]") (forward-char))
+        (looking-back "[-_a-zA-Z0-9]" (max (- (point) 1) (point-min)))
+        ;; (message "left is word or symbol")
+        (skip-chars-backward "-_a-zA-Z0-9")
+        ;; (re-search-backward "^\\(\\sw\\|\\s_\\)" nil t)
+        (push-mark)
+        (skip-chars-forward "-_a-zA-Z0-9")
+        (setq mark-active t)
+        ;; (exchange-point-and-mark)
+        )
+       ((and (looking-at "[:blank:]")
+             (prog2 (backward-char) (looking-at "[:blank:]") (forward-char)))
+        ;; (message "left and right both space" )
+        (skip-chars-backward "[:blank:]") (push-mark (point) t t)
+        (skip-chars-forward "[:blank:]"))
+       ((and (looking-at "\n")
+             (eq (char-before) 10))
+        ;; (message "left and right both newline")
+        (skip-chars-forward "\n")
+        (push-mark (point)  t t)
+        (re-search-forward "\n[ \t]*\n")) ; between blank lines, select next block
+       (t
+        ;; (message "just mark sexp" )
+        (mark-sexp)
+        (exchange-point-and-mark))
+       ;;
+       ))))
 (provide 'helpers)
