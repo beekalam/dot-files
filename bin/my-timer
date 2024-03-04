@@ -3,7 +3,7 @@ loop=""
 duration="5m"
 message="time's up"
 
-while getopts 'ld:m:h' OPTION
+while getopts 'ld:m:w:h' OPTION
 do
     case $OPTION in
 	l) loop=1
@@ -12,7 +12,9 @@ do
 	    ;;
 	m) message="$OPTARG"
 	    ;;
-	h) printf "usage: %s [-d duration] [-l loop-timer] [-m 'message' ] args\n" ${0##*/} >&2
+  w) loopduration="$OPTARG"
+     ;;
+	h) printf "usage: %s [-d duration] [-l loop-timer] [-m 'message' ] [-w wait duration between loops] \n" ${0##*/} >&2
 	    exit 2
 	    ;;
     esac
@@ -23,14 +25,22 @@ if [ -n "$loop" ]
 then
     while true
     do
-	sleep "$duration"
-	notify-send -u normal -i /usr/share/icons/Paper/64x64/apps/email.png "$message" && paplay /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
-	echo `date +"%Y-%m-%d %H:%M:%S"` " $message"
+        echo "waiting for $duration."
+        sleep "$duration"
+        notify-send -u normal -i /usr/share/icons/Paper/64x64/apps/email.png "$message" && paplay /usr/share/sounds/freedesktop/stereo/complete.oga
+        echo `date +"%Y-%m-%d %H:%M:%S"` " $message"
+
+        if [ -n "$loopduration" ]
+        then
+            echo "waiting for $loopduration"
+            sleep "$loopduration"
+            notify-send -u normal -i /usr/share/icons/Paper/64x64/apps/email.png "waitduration finished" && paplay /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
+        fi
     done
 else
     printf "We'll notify you in: $duration\n"
     sleep "$duration"
-    notify-send -u normal -i /usr/share/icons/Paper/64x64/apps/email.png "$message" && paplay /usr/share/sounds/freedesktop/stereo/message-new-instant.oga
+    notify-send -u normal -i /usr/share/icons/Paper/64x64/apps/email.png "$message" && paplay /usr/share/sounds/freedesktop/stereo/complete.oga
     echo "Bye."
 fi
 
