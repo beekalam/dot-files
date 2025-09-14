@@ -1,3 +1,8 @@
+
+(defun logmsg(msg)
+  (message (concat (format-time-string "%H:%M:%S.%3N" (current-time))
+       " " msg)))
+
 (defun seq-to-string(seq)
   (mapconcat #'(lambda(item) (concat item "")) seq " "  ))
 
@@ -341,12 +346,21 @@ Version 2017-01-11"
   (when (equal major-mode 'dired-mode)
     (when (s-ends-with-p ".pdf" (dired-file-name-at-point))
       (progn
-        (setq cmdstr (concat "FoxitReader "
+        (setq cmdstr (concat "evince "
                              "\""
                              (expand-file-name
                               (dired-file-name-at-point))
                              "\""))
         (shell-command cmdstr)))))
+
+
+(defun dired-open-clipboard()
+  (interactive)
+  (let* ((clip (shell-command-to-string "copyq read 0"))
+        (clip (s-chomp clip)))
+    (if (file-exists-p clip)
+        (dired clip)
+      (message "is not path"))))
 
 
 ;;; form https://zck.me/emacs-move-file
@@ -419,14 +433,41 @@ Version 2017-01-11"
         (clipboard-yank)
         (message "graphics active")
         )
-    (insert (shell-command-to-string "xsel -o -b"))
-    )
-  )
+    (insert (shell-command-to-string "xsel -o -b"))))
+
+
 
 (defun lookup-in-linguee()
   (interactive)
-  (setq linguee-url (format "https://www.linguee.com/english-german/search?source=german&query=%s" (current-word)))
+  (setq linguee-url
+        (format "https://www.linguee.com/english-german/search?source=german&query=%s"
+                (read-string "word: " (current-word))))
   (browse-url--browser linguee-url))
+
+(defun lookup-in-mql-docs()
+  (interactive)
+  (setq mql-url
+        (format "https://www.mql5.com/en/search#!keyword=%s&module=mql5_module_documentation"
+                (read-string "word: "(current-word))))
+  (browse-url--browser mql-url))
+
+(defun lookup-deepl-en-de ()
+  (interactive)
+  (if (region-active-p)
+      (progn
+        (setq s (buffer-substring-no-properties (region-beginning) (region-end)))
+        (setq deepl-url
+              (url-encode-url   (format "https://deepl.com/translator#en/de/%s" s)))
+        (browse-url--browser deepl-url))))
+
+(defun lookup-deepl-de-en ()
+  (interactive)
+  (if (region-active-p)
+      (progn
+        (setq s (buffer-substring-no-properties (region-beginning) (region-end)))
+        (setq deepl-url
+              (url-encode-url   (format "https://deepl.com/translator#de/en/%s" s)))
+        (browse-url--browser deepl-url))))
 
 (defun strip-srt-file ()
   (interactive)
@@ -446,53 +487,35 @@ Version 2017-01-11"
       ))
   (xah-clean-empty-lines))
 
-(defun strip-word (word)
-  (save-excursion
-    (save-restriction
-      (widen)
-      (goto-char (point-min))
-      (while (re-search-forward (format " %s " word) (point-max) t)
-        (replace-match " "))
-      (goto-char (point-min))
-      (while (re-search-forward (format "%s " word) (point-max) t)
-        (replace-match " "))
+(defun beekalam-last-copied-filenames()
+       "copy diredp-last-copied-filenames to clipboard"
+       (interactive)
+       (when diredp-last-copied-filenames
+        (kill-new
+        (string-join
+          (string-split  diredp-last-copied-filenames "\^@") "\n"))))
 
-      ;; (goto-char (point-min))
-      ;; (while (re-search-forward (format "%s, " word) (point-max) t)
-      ;;   (replace-match " "))
+(defun flush-blank-lines (start end)
+  (interactive "r")
+  (flush-lines "^\\s-*$" start end nil))
 
-      ;; (goto-char (point-min))
-      ;; (while (re-search-forward (format "%s\\\\? " word) (point-max) t)
-      ;;   (replace-match " "))
+(defun collapse-blank-lines (start end)
+  (interactive "r")
+  (replace-regexp "^\n\\{2,\\}" "\n" nil start end))
 
-      ;; (goto-char (point-min))
-      ;; (while (re-search-forward (format "%s\\\\." word) (point-max) t)
-      ;;   (replace-match " "))
-      )))
 
-(defun strip-stop-words ()
-  (interactive)
-  (setq stop-words (list
-                    "die" "der" "das"
-                    "was" "was?" "Was?" "wie" "wie?" "Wie?" "wo" "wo?" "Wo?"
-                    "wer" "wer?" "Wer?" "wann" "wann?" "Wann?" "sein" "dein" "du" "er" "Sie"
-                    "warum?" "Warum?"
-                    "Nein," "Nein" "nein" "den" "richtigen" "richtige" "richtiges"
-                    "Es"
-                    "ihr" "ihn" "ihnen" "sir" "Herr" "herr" "ok" "schon" "tut" "leid" "und?" "und"
-                    "Als" "als" "weil" "willst" "hin" "mich" "an" "nicht"
-                    "jede" "jeder" "jedes" "war" "alle" "welt" "Tor" "tor"
-                    "jetzt" "ihm" "verdammt" "verdammt" "bitte" "Bitte" "dass" "er" "Ich" "muss" "ih"
-                    "aus" "aber" "Aber" "Mehr" "mehr" "Zeit" "nicts" "Es" "es" "wo" "bist"
-                    "sind" "seid" "Nein" "ja" "Das" "das" "ist" "all" "alles" "Gib" "mir" "etwas"
-                    "Im" "im" "mit" "arschloch" "bei" "gab" "nur" "so" "viel" "verdammt" "hast" "also"
-                    "nehme" "bis" "dann" "alles" "Alles" "Hast" "hast" "da" "machst" "machen"
-                    "uns" "rein" "nach" "Nach" "Ich" "gut" "gut." "So" "so" "Du" "etwas" "etwas."
-                    "weil" "Weil" ",weil" "weil," "ein" "eine" "eines" "einem" "einer"
-                    "jeder" "Lasst" "uns" "raus" "raus," "verdammt!" "euch" "danke." "danke"
-                    "Danke." "Danke" "Hey," "hey," "hey" "ok." "ok" "zu" "zur"
-                     "warum" "Warum" "wir" "du?" "alle." "alle"
-                    ))
-  (mapcar #'strip-word stop-words))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar domain-regex "\\([0-9a-z]+\\(-[0-9a-z]+\\)*\\.\\)+[a-z]\\{2,\\}")
+
+
+(cl-defmacro run-config (&key desc body log enable)
+   `(let ((l ,log)
+          (e ,enable))
+      (when  e
+        (when l (message (format ";;;;;;; @ start of  %s ;;;;;" ,desc)))
+        (progn ( ,@body))
+        (when l (message (format ";;;;;; @ end of %s ;;;;;" ,desc))))))
 
 (provide 'util-funcs)
+
+

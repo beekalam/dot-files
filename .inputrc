@@ -1,1 +1,8 @@
 set bell-style visible
+set history-size 10000
+"\C-xq": rlwrap-call-editor
+"\C-x\C-e": rlwrap-call-editor
+ $if bb
+     set show-all-if-ambiguous On
+ $endif
+

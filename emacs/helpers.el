@@ -83,7 +83,10 @@
   )
 
 (defun my/alert (msg)
+  (interactive)
   (shell-command (concat "notify-send " "\"" msg "\"")))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -162,9 +165,9 @@
                      :scroll-bar t))
   (message selected)
   ;; (when selected
-    ;; (progn
-    ;;   (switch-to-buffer selected))
-    ;; )
+  ;; (progn
+  ;;   (switch-to-buffer selected))
+  ;; )
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -796,4 +799,34 @@ Version: 2020-02-04 2023-07-22 2023-07-23"
         (exchange-point-and-mark))
        ;;
        ))))
+
+(defun compile-mq5()
+  (interactive)
+  (message (file-name-nondirectory (buffer-file-name)))
+  (let* ((wine-cmd-str  "env WINEPREFIX=\"/home/moh/.mt5\" wine \"C:\\Program Files\\MetaTrader 5\\metaeditor64.exe\"  /compile:%s  /log:/tmp/mt.log")
+        (wine-cmd (format wine-cmd-str (file-name-nondirectory (buffer-file-name)))))
+    (shell-command-to-string wine-cmd))
+  (find-file "/tmp/mt.log")
+  (goto-char (point-max)))
+
+
+(defun cleanup-lsp-blacklist-folders ()
+  ;; https://www.reddit.com/r/emacs/comments/bjrd3f/how_can_i_unlock_folder_from_lspmode_blacklist/
+  (setf (lsp-session-folders-blacklist (lsp-session)) nil)
+  (lsp--persist-session (lsp-session)))
+
+;; (defun open-path-from-clipboard ()
+;;   (interactive)
+;;   (let ((cc (shell-command-to-string "xsel -o")))
+;;     (message cc)
+;;         (when (file-exists-p cc)
+;;           (message cc)
+;;           ;; (find-file cc)
+;;           )))
+
+
+(defun disable-python-backend ()
+  (interactive)
+  (setq python-backend nil))
+
 (provide 'helpers)

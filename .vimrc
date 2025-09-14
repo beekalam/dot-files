@@ -1,7 +1,6 @@
 " be vim instead of vi
 set nocompatible
 
-
 " display line numbers
 set nu
 
@@ -56,11 +55,20 @@ highlight WhitespaceEOL ctermbg=blue guibg=blue
 match WhitespaceEOL /\s\+$/
 
 
-
-
 " This tells vim to figure out what type of file it's looking at
 " and load the appropriate plugin
 filetype indent plugin on
+
+" theme
+colorscheme peachpuff
+
+" line highlight
+set cursorline
+
+" swap and backup file options - disable all of them
+set noswapfile
+set nobackup
+set nowb
 
 
 let mapleader=","
@@ -72,3 +80,8 @@ map <Leader>bb :buffers<enter>
 map <Leader>bd :bd<enter>
 
 imap fd <esc>
+
+
+
+
+
