@@ -1,4 +1,4 @@
-#!/usr/bin/env bb
+#!/usr/local/bin/bb
 (require '[clojure.string])
 
 (defn is-root []
