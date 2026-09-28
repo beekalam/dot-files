@@ -1,0 +1,17 @@
+#!/bin/bash
+
+rootdir="/media/ramdisk/yy"
+cd $rootdir
+
+while true
+do
+      echo "================="
+      dirname=`echo $RANDOM`
+      filename=`echo $RANDOM`
+      mkdir -p $rootdir/$dirname
+      touch "$rootdir/$dirname/$filename"
+      tr -dc A-Za-z0-9 </dev/urandom | head -c 2000 >> "$rootdir/$dirname/$filename"
+
+      ls $rootdir
+      sleep 1
+done

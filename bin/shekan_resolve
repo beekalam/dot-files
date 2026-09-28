@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+usage() {
+    echo "Usage: $0 -d <domain>"
+    echo
+    echo "Options:"
+    echo "  -d <domain>  Domain name (required)"
+    echo "  -h           Show this help message"
+}
+
+DOMAIN=""
+
+while getopts ":d:h" opt; do
+    case "$opt" in
+        d)
+            DOMAIN="$OPTARG"
+            ;;
+        h)
+            usage
+            exit 0
+            ;;
+        :)
+            echo "Error: -$OPTARG requires an argument." >&2
+            usage >&2
+            exit 1
+            ;;
+        \?)
+            echo "Error: invalid option -$OPTARG" >&2
+            usage >&2
+            exit 1
+            ;;
+    esac
+done
+
+# Check that -d was provided
+if [[ -z "$DOMAIN" ]]; then
+    echo "Error: -d <domain> is required." >&2
+    usage >&2
+    exit 1
+fi
+
+ip=$(dig +short "$DOMAIN" @185.51.200.1)
+echo "$ip $DOMAIN"

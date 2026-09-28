@@ -1,0 +1,3 @@
+#! /bin/bash
+
+tee /tmp/out.$$ && emacsclient -n /tmp/out.$$
