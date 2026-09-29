@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+
+function i_emacs {
+    sudo apt install emacs -y
+}
+
+function i_htop {
+    sudo apt install htop -y
+}
+
+function i_fzf {
+    sudo apt install fzf -y
+}
+
+function i_build_essentials {
+    sudo apt install build-essential -y
+    sudo apt install gdb -y
+}
+function i_git {
+    sudo apt install git -y
+}
+
+function i_all {
+    sudo apt update
+    i_emacs
+    i_htop
+    i_fzf
+    i_build_essentials
+    i_git
+}
+
+function tor:disable_proxy {
+    printf 'AUTHENTICATE\\r\\nRESETCONF Socks5Proxy\\r\\nQUIT\\r\\n' | nc 127.0.0.1 9051
+    echo "done"
+}
+
+function tor:change_ip {
+    # printf 'AUTHENTICATE\\r\\nSIGNAL NEWNYM\\r\\nQUIT\\r\\n' | nc -N 127.0.0.1 9051
+    printf 'AUTHENTICATE\r\nSIGNAL NEWNYM\r\nQUIT\r\n' | nc -N 127.0.0.1 9051
+}
+
+function tor:ip {
+    curl --socks5-hostname 127.0.0.1:9050 https://check.torproject.org/api/ip
+}
+
+function livebook:start {
+    cd /mnt/df/src/livebook-0.19.8
+    ./taskfile start
+}
+
+function mix:new {
+    local proj
+    if [[ $# -ne 1 ]]; then
+        read -p "proj: " proj
+    else
+        echo "project name was given"
+        proj="$1"
+    fi
+
+    mix phx.new "${proj}" --database sqlite3
+}
+
+function iex:start {
+    export ERL_AFLAGS="-kernel shell_history enabled"
+    iex
+}
+
+
+function c_dotfiles {
+    git clone https://github.com/beekalam/dot-files/
+    mv dot-files .dot-files
+}
+
+
+function c_book {
+    git clone https://github.com/PacktPublishing/Hands-on-System-Programming-with-Linux
+}
+
+function default {
+    help
+}
+
+function killer {
+    i_all
+    c_dotfiles
+    c_book
+}
+
+function l {
+    res=`taskfile | fzf | awk '{print $2}'`
+    trimmed_res=$(printf '%s' "$res" | awk '{ sub(/^[[:space:]]+/, ""); print }')
+    # echo "ts: $trimmed_res"
+    taskfile "$trimmed_res"
+}
+
+function help {
+    echo "$0 <task> <args>"
+    echo "Tasks:"
+    compgen -A function | cat -n
+    # compgen -A function | grep "^cmd_"
+}
+
+TIMEFORMAT="Task completed in %3lR"
+time ${@:-default}
