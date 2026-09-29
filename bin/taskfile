@@ -76,14 +76,21 @@ function c_book {
     git clone https://github.com/PacktPublishing/Hands-on-System-Programming-with-Linux
 }
 
-function default {
-    help
+
+function setup:dot_files {
+    if grep -qsF '. ~/.dot-files/.bashrc' "$HOME/.bashrc"; then
+        echo "already in bashrc"
+    else
+        echo '. ~/.dot-files/.bashrc' >> .bashrc
+    fi
 }
 
 function killer {
-    i_all
-    c_dotfiles
-    c_book
+    echo "in killer"
+    setup:dot_files
+    # i_all
+    # c_dotfiles
+    #c_book
 }
 
 function l {
@@ -91,6 +98,10 @@ function l {
     trimmed_res=$(printf '%s' "$res" | awk '{ sub(/^[[:space:]]+/, ""); print }')
     # echo "ts: $trimmed_res"
     taskfile "$trimmed_res"
+}
+
+function default {
+    help
 }
 
 function help {
