@@ -12,6 +12,10 @@ function i_fzf {
     sudo apt install fzf -y
 }
 
+function i_ncurses {
+    sudo apt install libncurses-dev
+}
+
 function i_build_essentials {
     sudo apt install build-essential -y
     sudo apt install gdb -y
@@ -27,6 +31,7 @@ function i_all {
     i_fzf
     i_build_essentials
     i_git
+    i_incurses
 }
 
 function tor:disable_proxy {

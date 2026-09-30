@@ -1,15 +1,24 @@
 #! /bin/bash
 
+
 if [ $# -eq 0 ]
 then
     # echo "No arguments supplied"
-    emacsclient -n $PWD && wmctrl -a 'emacs'
+    emacsclient -n --eval "(ranger \"$PWD\")" && wmctrl -a 'emacs'
+    # emacsclient -n $PWD && wmctrl -a 'emacs'
     exit
 fi
 
 if [ -d $1 ]
 then
-    emacsclient -n $PWD && wmctrl -a 'emacs'
+    if [[ "$1" == "." ]]; then
+        emacsclient -n --eval "(ranger \"$PWD\")" && wmctrl -a 'emacs'
+        exit
+    else
+        emacsclient -n --eval "(ranger \"$1\")" && wmctrl -a 'emacs'
+        # emacsclient -n $PWD && wmctrl -a 'emacs'
+        exit
+    fi
 fi
 
 if [ -L $1 ]; then
@@ -21,8 +30,13 @@ fi
 
 if [[ ! -f "$filepath" ]]
 then
-    echo "$filepath does not exist"
-    exit
+    echo -n "'$filepath' does not exist create:"
+    read  ans
+    if [[ "$ans" == "y" ]]; then
+        echo "$PWD/$filepath"
+    else
+        exit
+    fi
 fi
 
 
