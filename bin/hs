@@ -8,7 +8,8 @@
        (range 1 (count input))))
 
 (let [words *command-line-args*
-      p     "/home/moh/.bash_history"
+      p (str (System/getProperty "user.home") "/.bash_history")
       lines (str/split-lines (slurp p))]
+
   (clojure.pprint/pprint
     (filter #(all-words-in-string? words %) lines)))

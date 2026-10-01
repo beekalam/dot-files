@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+for f in ~/.cache/.fr*
+do
+    echo  "deleting " `basename $f`  " stats: "  `du -sh $f`
+    rm -rf $f
+done
+
+rm -rf ~/.cache/guile/ccache/3.0-LE-8-4.5/*
+
+

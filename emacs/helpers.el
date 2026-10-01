@@ -829,4 +829,31 @@ Version: 2020-02-04 2023-07-22 2023-07-23"
   (interactive)
   (setq python-backend nil))
 
+(defun disable-elixir-backend()
+  (interactive)
+  (setq elixir-backend nil))
+
+(defun my-create-desktop-file (name exec icon)
+  (interactive
+   (list
+    (read-string "Name: ")
+    (read-string "Exec: ")
+    (read-string "Icon: ")))
+  (let ((file (expand-file-name
+               (concat (downcase (replace-regexp-in-string
+                                  "[^[:alnum:]]+" "-" name))
+                       ".desktop")
+               "~/.local/share/applications/")))
+    (make-directory (file-name-directory file) t)
+    (with-temp-file file
+      (insert "[Desktop Entry]\n"
+              "Type=Application\n"
+              "Name=" name "\n"
+              "Exec=" exec "\n"
+              "Icon=" icon "\n"
+              "Terminal=false\n"
+              "Categories=Utility;\n"))
+    (message "Created %s" file)))
+
 (provide 'helpers)
+

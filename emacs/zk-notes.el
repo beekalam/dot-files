@@ -79,6 +79,41 @@
   ;;                          (+ 2 (match-end 2))
   ;;                          'font-lock-face
   ;;                          '(:foreground "red")))))
+(defun my/open-pdf-with-evince (file)
+  "Open FILE with Evince PDF viewer asynchronously."
+  (interactive "fOpen PDF with Evince: ")
+  (let ((expanded-file (expand-file-name file)))
+    (if (not (file-exists-p expanded-file))
+        (message "File does not exist: %s" expanded-file)
+      (start-process "evince-process" nil "evince" expanded-file)
+      (message "Opening %s with Evince..." expanded-file))))
+
+(defun my/open-pdf-with-evince-by-page-number (file &optional page-number)
+  "Open FILE with Evince PDF viewer asynchronously.
+
+If called with a prefix argument (C-u), prompt for PAGE-NUMBER
+and open the PDF directly at that page using Evince's --page-label flag."
+  (interactive
+   (list (read-file-name "Open PDF with Evince: ")
+         (when current-prefix-arg
+           (let ((input (read-string "Page number (leave empty to skip): ")))
+             (unless (string-empty-p input)
+               (string-to-number input))))))
+  (let ((expanded-file (expand-file-name file)))
+    (if (not (file-exists-p expanded-file))
+        (message "File does not exist: %s" expanded-file)
+      ;; Build the argument list for Evince
+      (let ((args (list expanded-file)))
+        ;; If a valid page number is provided, prepend the --page-label flag
+        (when (and page-number (integerp page-number) (> page-number 0))
+          (setq args (cons "--page-label" (cons (number-to-string page-number) args))))
+        ;; Start Evince asynchronously
+        (apply 'start-process "evince-process" nil "evince" args))
+      (message "Opening %s with Evince%s..."
+               expanded-file
+               (if page-number (format " at page %s" page-number) "")))))
+;; (my/open-pdf-with-evince "/tmp/xx/a.pdf" 59)
+
 
   (defun zk-colorize-links_22()
     (interactive)
@@ -121,13 +156,19 @@
                      (second (s-split "=" meta-part))
                      )))
         (message pdf-file-path)
+        (message "======================")
         (when (s-ends-with? ".pdf" pdf-file-path)
-          (find-file pdf-file-full-path)
-          (when page
-            (pdf-view-goto-page (string-to-number page))
+          ;; (find-file pdf-file-full-path)
+          ;; (my/open-pdf-with-evince pdf-file-full-path)
+          (if page
+            ;; (pdf-view-goto-page (string-to-number page))
+            (my/open-pdf-with-evince-by-page-number pdf-file-full-path
+                                                    (string-to-number page))
+            (my/open-pdf-with-evince pdf-file-full-path)
             )))
       ))
 
+;; (my/open-pdf-with-evince-by-page-number "/tmp/xx/a.pdf" (string-to-number "55"))
   ;; (global-set-key (kbd "<mouse-1>") 'zk-open-link-at-point)
   ;; (global-set-key (kbd "<mouse-3>") 'previous-buffer )
   ;; (global-set-key (kbd "M-<return>") #'zk-open-link-at-point)
@@ -287,6 +328,13 @@
            (notes (mapc (lambda(x) (list x x)) (search-notes input)))
            (res (completing-read "term: " notes nil t)))
       (find-file res)))
+
+   (defun zk-find-note()
+     (interactive)
+     (let* (
+            (files (directory-files notes-path t "\\.md"))
+            (file (completing-read "file:" files nil t)))
+       (find-file file)))
 
 
   ;; (add-hook 'markdown-mode (lambda()

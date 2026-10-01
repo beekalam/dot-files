@@ -2,16 +2,23 @@ BASEDIR="$(dirname $(readlink -f ${BASH_SOURCE[0]}))"
 
 PATH=$PATH:~/.dot-files/bin/
 
-. ~/.dot-files/z/z.sh
+shopt -s histappend
+PROMPT_COMMAND='history -a'
+HISTSIZE=10000
+HISTFILESIZE=20000
+
+source ${BASEDIR}/z/z.sh
 
 # if lampp server is installed add it to path
-if [[ -d '/opt/lampp/bin' ]]
-then
-    PATH=$PATH:/opt/lampp/bin
-fi
+# if [[ -d '/opt/lampp/bin' ]]
+# then
+#     PATH=$PATH:/opt/lampp/bin
+# fi
 
 # pip3 virtualenv
 PATH=$PATH:~/.local/bin
+PATH=$PATH:/opt/dcm4che-5.31.1/bin
+
 
 # init go path if it is installed
 if [[ -d '/usr/local/go' ]]
@@ -50,5 +57,7 @@ if [ -f ~/.dot-files/.bash_aliases ]; then
     . ~/.dot-files/.bash_aliases
 fi
 
-source ~/.dot-files/bookmark-manager.sh
-source ~/.dot-files/play.sh
+source ${BASEDIR}/.bash_utils.sh
+source ${BASEDIR}/play.sh
+source ${BASEDIR}/command-bookmarks.sh
+source ${BASEDIR}/bookmark-manager.sh

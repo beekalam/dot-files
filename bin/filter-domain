@@ -3,23 +3,26 @@
 (require '[clojure.string :as str])
 
 (defn is-domain [s]
-  (if (re-matches #"([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}" s)
+  (if (re-matches #"([a-z0-9]+([-a-z0-9]+)*\.)+[a-z]{2,}" s)
     true
     false))
 
 (defn filter-domain [s]
-  (when-let [matches (re-matches #"([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}" s)]
+  (when-let [matches (re-matches #"([a-z0-9]+([-a-z0-9]+)*\.)+[a-z]{2,}" s)]
     (nth  matches 0)))
 
 (defn main[]
 
   (let [line (slurp *in*)]
     (doseq [s (str/split line #"\n")]
-  ;;    (println s)
-    ;; (println (is-domain s))
-      (when (is-domain s)
-        (println (filter-domain s)))
-    )
-  ))
+      ;; (println line)
+      (doseq [part (str/split s #"\s+")]
+      ;; (println part)
+      ;; (println (is-domain s))
+      (when (is-domain part)
+        (println (filter-domain part)))
+      )
+    )))
+
 
 (main)

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# taken from https://dmitryfrank.com/articles/shell_shortcuts
+
 be() {
     if [ -r ~/.bookmarks ]
     then

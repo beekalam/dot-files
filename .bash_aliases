@@ -3,7 +3,6 @@
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 function bashAliases() {
-  #------------@bash--------------------
   # some more ls aliases
   alias ll='ls -alF'
   alias la='ls -A'
@@ -12,13 +11,14 @@ function bashAliases() {
   alias ..="cd .."
   alias ...="cd ../.."
   alias ....="cd ../../.."
+  alias ch="cd ~/"
   alias grepi="grep -i"
   alias path="echo $PATH | tr ":" '\n'"
   alias xampp="sudo /opt/lampp/xampp"
   alias lsi="ls -lh | grep -i "
   #-- @pdfsam
-  alias pdfsam='nohup java -jar /mnt/11D3A2BE6C7F0676/opt/pdfsam-4.2.12-linux/pdfsam-basic-4.2.12.jar >/dev/null 2>&1 &'
-  alias vmtouch_vscode='vmtouch -vt /usr/share/code'
+  alias pdfsam='nohup java -jar /mnt/dd/opt/pdfsam-4.2.12-linux/pdfsam-basic-4.2.12.jar >/dev/null 2>&1 &'
+  alias vmtouch_vscode='vmtouch -vt /usr/share/code && vmtouch -vt ~/.vscode/extensions'
   alias vmtouch_emacs='vmtouch -vt /usr/local/bin/emacs && vmtouch -vt ~/.emacs.d/layers/ vmtouch -vt ~/.emacs.d/eln-cache'
   # copy PWD to clipboard
   alias cpwd='echo "$PWD" | xsel --clipboard'
@@ -30,11 +30,12 @@ function bashAliases() {
   alias cdd="cd /run/user/1000/gvfs/smb-share:server=192.168.1.110,share=d,user=moh"
   alias cde="cd /run/user/1000/gvfs/smb-share:server=192.168.1.110,share=e,user=moh"
   alias emacsnw="emacs -nw"
+  # alias ec="emacsclient -n"
+  # alias e="emacsclient -n . && wmctrl -a 'emacs'"
   alias mount_ramdisk="sudo mount -t tmpfs -o size=1G tmpfs /media/ramdisk/"
-  alias bashrcreload="source ~/.bashrc"
-  alias aliasreload="source ~/.bash_aliases"
+  alias umount_ramdisk="sudo umount /media/ramdisk"
+  alias reload="source ~/.dot-files/.bash_aliases && source ~/.bash_aliases"
   alias bashrcedit="vim ~/.bashrc"
-  alias hs="history"
   alias hsg="history | grep "
   alias alg="alias | grep "
   alias psg="ps aux | grep -v grep | grep"
@@ -59,41 +60,18 @@ function bashAliases() {
   alias susstop="sudo systemctl stop"
   alias susstart="sudo systemctl start"
   alias susstatus="sudo systemctl status"
-  #alias whatismyip="curl https://checkip.amazonaws.com/"
   alias whatismyip="dig +short myip.opendns.com @resolver1.opendns.com"
-  alias pingg="ping google.com"
+  alias whatismyip2="curl https://checkip.amazonaws.com/"
+  alias ping8888="ping 8.8.8.8" # To check if I am online.
   alias taillog="tail -f /var/log/syslog"
+  #-------------------
+  alias r=". ranger"
+  alias rmd="rm -rf ./* "
+  alias subl="/opt/sublime_text/sublime_text"
+  alias curlin="curl -k --insecure"
 }
 
-function laravelAliases() {
-  alias par="php artisan "
-  alias pars="php artisan serve"
-  alias parm="php artisan migrate"
-  alias parmm="php artisan make:model "
-  alias parmmi="php artisan make:migration "
-  alias parmf="php artisan make:factory    "
-  alias parmfs="php artisan migrate:fresh --seed"
-  alias parmt="php artisan make:test "
-  alias parmc="php artisan make:controller"
-  alias pat="php artisan tinker"
-  alias pasanctum="composer require laravel/sanctum && php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider" && php artisan migrate"
-}
 
-function composerAliases () {
-    alias cor="composer require "
-    alias cola="composer create-project laravel/laravel"
-    alias coda="composer dump-autoload"
-    alias coinit='[[ ! -f composer.json ]] && echo "{
-    \"name\": \"beekalam/php-demo\",
-    \"authors\": [
-        {
-            \"name\": \"Mohammad Reza mansouri\",
-            \"email\": \"beekalam@gmail.com\"
-        }
-    ],
-    \"require\": {}
-}" > composer.json && echo "created composer.json" '
-}
 
 function npmAliases () {
     alias npmi="npm install "
@@ -118,51 +96,42 @@ function dockerAliases () {
     alias dkrmflast='docker rm -f $(dklcid)'
     alias dkbash='dkelc'
     alias dkex='docker exec -it ' # Useful to run any commands into container without leaving host
-    alias dkri='do''cker run --rm -i '
+    alias dkri='docker run --rm -i '
     alias dkric='docker run --rm -i -v $PWD:/cwd -w /cwd '
     alias dkrit='docker run --rm -it '
+    alias dkr="docker container rm "
+    alias dkrf="docker container rm -f "
     alias dkritc='docker run --rm -it -v $PWD:/cwd -w /cwd '
     alias dk_pg_playground='docker run --rm --name pg13 -e POSTGRES_PASSWORD=123 -d postgres:13.4 && docker exec -it pg13 bash --login'
     alias dk_mongo_playground='docker run -d --rm --name some-mongo -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=root -e MONGO_INITDB_ROOT_PASSWORD=password mongo:latest'
     alias dk_mongo_shell='docker container exec -it some-mongo bash'
+ #   alias dk_opengrok='docker run -d -v .:/opengrok/src -p 8080:8080 opengrok/docker:latest && browse "http://localhost:8080"'
+    alias dk_opengrok='docker run -it --mount type=bind,src=./,dst=/opengrok/src -p 8080:8080 opengrok/docker:latest && browse "http://localhost:8080"'
+    alias dk_keycloak='docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:19.0.1 start-dev'
     #-- @docker-compose
-    alias dc='docker-compose'
-    alias dcu='docker-compose up '
-    alias dcd='docker-compose down '
-    alias dcr='docker-compose run '
-    alias dcrr='docker-compose run --rm   '
-    alias dcl='docker-compose logs '
+    alias dc='docker compose'
+    alias dcu='docker compose up '
+    alias dcd='docker compose down '
+    alias dcr='docker compose run '
+    alias dcrr='docker compose run --rm   '
+    alias dcl='docker compose logs '
 }
 
 function goAliases () {
     alias grm="go run main.go"
 }
 
-function phpAliases () {
-    alias punit="./vendor/bin/phpunit "
-    alias setphp72="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-7.2 lampp"
-    alias setphp74="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-7.4 lampp"
-    alias setphp8="cd /opt && sudo rm /opt/lampp && sudo ln -s /opt/lampp-8 lampp"
-    alias php_playground="php -S localhost:9090 -t /home/moh/code/php/php-console"
-}
 function gitAliases () {
     alias gitinit='git init && git add . && git commit -m "initial commit" && git log'
+    alias git-safe="git config --global --add safe.directory \"$PWD\""
 }
 
-function protovpnAliases () {
-    alias proc="sudo protonvpn connect"
-    alias prod="sudo protonvpn disconnect"
-    alias pros="sudo protonvpn status"
-    alias proc.de="sudo protonvpn connect --cc DE -p udp"
-    alias proc.nl="sudo protonvpn connect --cc NL -p udp"
-    alias proc.uae="sudo protonvpn connect --cc AE -p udp"
-    alias pro.reset="prod && proc.nl && whatismyip"
-}
 
 function pythonAliases () {
     #----------@python,virtualenv--------
-    alias activate="source venv/bin/activate"
+    alias activate="source venv/bin/activate || source .venv/bin/activate"
 }
+
 #-----------------------------------
 alias xampp.manager="sudo /opt/lampp/manager-linux-x64.run"
 alias cleanservices="sudo service anydesk stop && \
@@ -184,22 +153,73 @@ alias import_chrome_bookmarks_to_qutebrowser="python3.8 /usr/share/qutebrowser/s
 alias mongostart="sudo systemctl start mongod.service"
 alias mongodstop="sudo systemctl stop mongod.service"
 
+alias wg-up='sudo wg-quick up wg0'
+alias wg-down='sudo wg-quick down wg0'
 
-function kubernetesAliases() {
-    alias kgp="kubectl get pods"
-}
+
+
+
 
 bashAliases
-laravelAliases
-composerAliases
 npmAliases
 goAliases
 dockerAliases
-phpAliases
 gitAliases
+pythonAliases
+alias code_proxy="code --proxy-server=\"http=localhost:8118;https=localhost:8118\" --proxy-bypass-list=\"localhost;127.0.0.1;\""
+
+alias bbi="rlwrap bb --init /home/moh/bbinit.clj"
+alias pdate='curl "https://www.time.ir" -o - -s | htmlxpath "/html/body/div/form/section/div[1]/div/div[1]/div/div/div/div[2]/div/div[1]/div/div[2]/span/text()"'
+# alias jd="java -jar /home/moh/.opt/jd-gui-1.6.6.jar"
+alias jdt="java -jar /mnt/dd/src/java/libraries/jdt-2.8/jdt2.80.6446-release/lib/jdt-cli.jar "
+alias mvn2='/home/moh/.opt/idea-IU-222.3739.54/plugins/maven/lib/maven3/bin/mvn'
+alias toggle-shecan='sudo /home/moh/bin/bb /home/moh/.dot-files/bin/toggle-shecan'
+alias obsidian-proxified='open obsidian --proxy-server=localhost:8118'
+alias java-app='java -jar /mnt/dd/src/java/java-playground/target/demo-1.0-SNAPSHOT-shaded.jar'
+alias noip="cd /home/moh/.opt/noip/ && ./noip2 -c /home/moh/.opt/noip/no-ip2.conf "
+# alias extract_ssh_log_ips="cat /home/moh/ssh_logs.log | awk '{print $10; printf "\n"}'  | filter-domain  | sort | uniq > ssh_log_domains.log"
+alias my-timer_10sbreak="my-timer -d 10m -l -w 11  -m '10s break'"
+alias kmonad-start="sudo /opt/kmonad/kmonad /opt/kmonad/km.kbd"
+alias kmonad-debug="sudo /opt/kmonad/kmonad /opt/kmonad/km.kbd -l debug"
+alias jd-cli="/home/moh/.opt/jd-cli-1.2.0-dist/jd-cli"
+
+alias kss="sudo ls && /home/moh/.dot-files/bin/kmonad-start.sh"
+alias pyc="/opt/jetbrains/pycharm-2024.3.3/bin/pycharm.sh"
+
+function run {
+    if  test -f "./taskfile"
+    then
+        ./taskfile  $*
+    elif  test -f "./Taskfile"
+    then
+         ./Taskfile $* 
+    else
+        echo "taskfile does not exist."
+    fi
+}
 
 
-qcd () {
+
+
+lja[0]="/home/moh/Downloads"
+lja[1]="/mnt/dd"
+lja[2]="/mnt/dd/notes/zettle_notes"
+
+ps1() { ps -ef | grep "$1" |grep -v grep| awk '{print $2}' | xargs pwd; }
+
+lj () {
+    # for d in ${lja[@]}
+    # do
+    #     echo  "$d "
+    # done
+    ljs=( `cat /home/moh/.lj` )
+    for line in "${ljs[@]}"
+    do
+        echo line: $line
+    done
+}
+
+lj_ () {
     # Accept 1 argument that's a string key, and perform a different
     # "cd" operation for each key.
     case "$1" in
@@ -207,23 +227,23 @@ qcd () {
             cd $HOME/Downloads
             ;;
         mounts)
-            cd /mnt/11D3A2BE6C7F0676/
+            cd /mnt/dd/
             ;;
         notes)
-            cd /mnt/11D3A2BE6C7F0676/notes/zettle_notes
+            cd /mnt/dd/notes/zettle_notes
             ;;
         code)
             cd $HOME/code
             ;;
         *)
             # The supplied argument was not one of the supported keys
-            echo "qcd: unknown key '$1'"
+            echo "lj: unknown key '$1'"
             return 1
             ;;
     esac
     # Helpfully print the current directory name to indicate where you are
     pwd
 }
-# Set up tab completion
-complete -W "downloads mounts notes code" qcd
 
+# Set up tab completion
+complete -W "downloads mounts notes code" lj
