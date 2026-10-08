@@ -2,6 +2,14 @@
 import subprocess
 import sys
 import argparse
+import socket
+
+def resolve_system(domain: str, timeout: float) -> str | None:
+    """Resolve via the system's own resolver."""
+    try:
+        return socket.gethostbyname(domain)
+    except socket.gaierror:
+        return None
 
 
 def tor_resolve(domain, timeout=10.0):
@@ -28,6 +36,7 @@ def tor_resolve(domain, timeout=10.0):
 # Registry: add new resolvers here.
 RESOLVERS = {
     "tor": tor_resolve,
+    "system": resolve_system,
     # "system": resolve_system,   # ← future
     # "dnspython": resolve_dnspython,
 }

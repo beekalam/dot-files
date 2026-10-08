@@ -6,6 +6,9 @@ Store: count, qtypes, clients, servers, and resolved IPs.
 
 import subprocess
 import sys
+import argparse
+import uuid
+import os
 
 # --- Config --------------------------------------------------------------
 IFACE   = "any"
@@ -39,11 +42,12 @@ def new_entry():
         "resolved_ips": set(),   # all IPs the name resolved to
     }
 
-def build_cmd():
+def build_cmd(dump_file_path: str):
     cmd = [
         "sudo", "tshark",
         "-i", IFACE,
         "-f", BPF,
+        "-w", dump_file_path,
         "-T", "fields",
         "-E", f"separator={SEP}",
         "-E", "occurrence=a",          # collect ALL occurrences of each field
@@ -56,8 +60,8 @@ def build_cmd():
         cmd += ["-e", f]
     return cmd
 
-def run(queries: dict):
-    cmd = build_cmd()
+def run(queries: dict, dump_file_path: str):
+    cmd = build_cmd(dump_file_path)
     print(f"[*] Running: {' '.join(cmd)}", file=sys.stderr)
     print("[*] Press Ctrl+C to stop.\n", file=sys.stderr)
 
@@ -116,10 +120,26 @@ def run(queries: dict):
         except subprocess.TimeoutExpired:
             proc.kill()
 
-def main():
+def parse_args(argv):
+    parser = argparse.ArgumentParser(
+        prog="dns_sniffer.py",
+        description="Sniff all dns packets",
+    )
+    parser.add_argument(
+        "-d", "--dump",
+        default="/tmp",
+        help="dump location by default '/tmp'",
+    )
+    return parser.parse_args(argv)
+
+def main(argv):
+    args = parse_args(argv)
+    dump_file_path = os.path.join(args.dump, f"dns_{uuid.uuid4().hex}.pcap")
+    # print("args: ", dump_file_path)
+    # sys.exit()
     queries = {}
     try:
-        run(queries)
+        run(queries, dump_file_path)
     except FileNotFoundError:
         print("[!] tshark not found. Install: sudo apt install tshark", file=sys.stderr)
         sys.exit(1)
@@ -148,4 +168,4 @@ def main():
         print(f"{name:<40} count={d['count']:<4} types={d['types']} ips=[{ips}]")
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

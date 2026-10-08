@@ -14,6 +14,7 @@ export https_proxy="http://localhost:8889"
 #export http_proxy="http://192.168.1.170:2335"
 #export https_proxy="http://192.168.1.170:2335"
 
+
 # export http_proxy="http://localhost:2334"
 # export https_proxy="http://localhost:2334"
 # export OLLAMA_CONTEXT_LENGTH=64000

@@ -1,21 +1,24 @@
 #! /bin/bash
 
 
+# no args open ranger in PWD
 if [ $# -eq 0 ]
 then
-    # echo "No arguments supplied"
-    emacsclient -n --eval "(ranger \"$PWD\")" && wmctrl -a 'emacs'
-    # emacsclient -n $PWD && wmctrl -a 'emacs'
+    emacsclient -n --eval "(dired \"$PWD\")" && wmctrl -a 'emacs'
     exit
 fi
 
+# A path was given open ranger
 if [ -d $1 ]
 then
+    echo "should"
     if [[ "$1" == "." ]]; then
-        emacsclient -n --eval "(ranger \"$PWD\")" && wmctrl -a 'emacs'
+        echo "in if"
+        echo "(ranger \"$PWD\")"
+        emacsclient -n --eval "(dired \"$PWD\")" && wmctrl -a 'emacs'
         exit
     else
-        emacsclient -n --eval "(ranger \"$1\")" && wmctrl -a 'emacs'
+        emacsclient -n --eval "(dired \"$1\")" && wmctrl -a 'emacs'
         # emacsclient -n $PWD && wmctrl -a 'emacs'
         exit
     fi
@@ -41,4 +44,3 @@ fi
 
 
 emacsclient -n $filepath && wmctrl -a 'emacs'
-

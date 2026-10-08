@@ -1,0 +1,4 @@
+#!/bin/bash
+shopt -s extglob
+f="$1"
+mv -- "$f" "${f//+( )/_}"

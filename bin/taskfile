@@ -24,6 +24,33 @@ function i_git {
     sudo apt install git -y
 }
 
+function i_lf {
+    sudo apt install lf
+}
+
+function i_ytdlp {
+    cd ~
+    wget -c https://github.com/yt-dlp/yt-dlp/releases/download/2026.08.19/yt-dlp_linux
+    chmod +x ./yt-dlp_linux
+    mkdir -p .opt
+    mv yt-dlp_linux .opt
+    ln -s ~/.opt/yt-dlp_linux /usr/local/bin/yt-dlp
+}
+
+function i_guix {
+    wget https://guix.gnu.org/guix-install.sh
+    chmod +x guix-install.sh
+    yes | ./guix-install.sh
+    # echo 'GUIX_PROFILE="$HOME/.guix-profile"' >> $HOME/.bashrc
+    echo 'GUIX_PROFILE=/root/.guix-profile' >> ~$HOME/.bashrc
+    echo 'PATH=$PATH:$HOME/.guix-profile/bin/' >> $HOME/.bashrc
+    source $HOME/.bashrc
+}
+
+function i_install_with_guix {
+    guix package -i guile lf git gdb emacs htop
+}
+
 function i_all {
     sudo apt update
     i_emacs
@@ -32,6 +59,15 @@ function i_all {
     i_build_essentials
     i_git
     i_incurses
+    i_lf
+}
+
+function app:super {
+    exec /mnt/dd/opt/superProductivity-x86_64.AppImage > /dev/null 2>&1 &
+}
+
+function notify {
+    XDG_RUNTIME_DIR=/run/user/$(id -u) notify-send  "$1"
 }
 
 function tor:disable_proxy {
@@ -41,12 +77,24 @@ function tor:disable_proxy {
 
 function tor:change_ip {
     # printf 'AUTHENTICATE\\r\\nSIGNAL NEWNYM\\r\\nQUIT\\r\\n' | nc -N 127.0.0.1 9051
+    tor:ip
     printf 'AUTHENTICATE\r\nSIGNAL NEWNYM\r\nQUIT\r\n' | nc -N 127.0.0.1 9051
+    tor:ip
 }
 
 function tor:ip {
     curl --socks5-hostname 127.0.0.1:9050 https://check.torproject.org/api/ip
 }
+
+function tor:restart {
+    sudo service tor restart
+    tor:logs
+}
+
+function tor:logs {
+    journalctl -u  tor@default.service -f
+}
+
 
 function livebook:start {
     cd /mnt/df/src/livebook-0.19.8
@@ -103,6 +151,17 @@ function l {
     trimmed_res=$(printf '%s' "$res" | awk '{ sub(/^[[:space:]]+/, ""); print }')
     # echo "ts: $trimmed_res"
     taskfile "$trimmed_res"
+}
+
+function help_func {
+    read -p "function name:" name
+    sed -n "\|^function ${name}|,\|^}|p" ~/.dot-files/bin/taskfile
+}
+
+function mk {
+    res=`maak -f /mnt/df/src/todo-app/maak.scm --list | fzf --ansi`
+    echo "$res"
+    maak -f /mnt/df/src/todo-app/maak.scm "$res"
 }
 
 function default {
